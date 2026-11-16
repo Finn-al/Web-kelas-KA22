@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Sistem Informasi Kelas Perkuliahan Universitas Gunadarma.">
+    <meta name="author" content="Devcrud">
+    <title>Sistem Informasi Kelas | Universitas Gunadarma</title>
+    <!-- font icons -->
+    <link rel="stylesheet" href="assets/vendors/themify-icons/css/themify-icons.css">
+    <!-- Bootstrap + SMKN 1 Cikbar main styles -->
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body data-spy="scroll" data-target=".navbar" data-offset="40" id="dashboard">
+
+    <aside class="dashboard-sidebar" aria-label="Navigasi kelas 2KA22">
+        <a class="dashboard-brand" href="#home">
+            <span class="dashboard-brand-mark">2K</span>
+            <span>
+                <strong>Kelas 2KA22</strong>
+                <small>Sistem Informasi</small>
+            </span>
+        </a>
+        <p class="sidebar-label">MENU UTAMA</p>
+        <nav class="sidebar-menu" aria-label="Navigasi dashboard">
+            <a href="#home"><i class="ti-home" aria-hidden="true"></i><span>Dashboard</span></a>
+            <a href="#jadwal"><i class="ti-calendar" aria-hidden="true"></i><span>Jadwal Kuliah</span></a>
+            <a href="#dashboard-widgets"><i class="ti-book" aria-hidden="true"></i><span>Tugas &amp; Materi</span></a>
+            <a href="#about"><i class="ti-info-alt" aria-hidden="true"></i><span>Informasi Kelas</span></a>
+            <a href="#contact"><i class="ti-comment-alt" aria-hidden="true"></i><span>Kotak Aspirasi</span></a>
+        </nav>
+        <a class="sidebar-login" href="login.html"><i class="ti-user" aria-hidden="true"></i> Login</a>
+        <div class="sidebar-footer">Universitas Gunadarma<br>FIKTI · 2KA22</div>
+    </aside>
+
+    <main class="dashboard-main">
+
+    <!-- Page Navbar -->
+    <nav class="custom-navbar" data-spy="affix" data-offset-top="20">
+        <div class="container">
+            <a class="logo" href="#">2KA22</a>
+            <ul class="nav" id="primary-nav">
+                <li class="item">
+                    <a class="link" href="#home">Beranda</a>
+                </li>
+                <li class="item">
+                    <a class="link" href="#about">Tentang</a>
+                </li>
+                <li class="item">
+                    <a class="link" href="#jadwal">Jadwal Kuliah</a>
+                </li>
+                <li class="item">
+                    <a class="link" href="#portfolio">Aktivitas</a>
+                </li>
+                <li class="item">
+                    <a class="link" href="#contact">Kontak</a>
+                </li>
+                <li class="item ml-md-3">
+                    <a href="login.html" class="btn btn-primary">Login</a>
+                </li>
+            </ul>
+            <a href="javascript:void(0)" id="nav-toggle" class="hamburger hamburger--elastic"
+                aria-controls="primary-nav" aria-expanded="false" aria-label="Buka navigasi">
+                <div class="hamburger-box">
+                    <div class="hamburger-inner"></div>
+                </div>
+            </a>
+        </div>
+    </nav><!-- End of Page Navbar -->
+
+    <!-- page header -->
+    <header id="home" class="header">
+        <div class="overlay"></div>
+        <div class="header-content container">
+            <h1 class="header-title">
+                <span class="up">SISTEM INFORMASI</span>
+                <span class="down">KELAS <span class="rotating-text" id="rotating-text">[ KELOMPOK ]</span></span>
+            </h1>
+            <p class="header-subtitle">Fakultas Ilmu Komputer dan Teknologi Informasi — Universitas Gunadarma</p>
+
+            <a href="#jadwal" class="btn btn-primary">Jadwal &amp; Info Kuliah</a>
+        </div>
+        <div class="hero-marquee" role="group" aria-label="2KA22 SOLID, SISTEM INFORMASI, KULIAH DAN PRAKTIKUM, TUGAS DAN DEADLINE, UNIVERSITAS GUNADARMA">
+            <div class="hero-marquee-track" aria-hidden="true">
+                <span>*** 2KA22 SOLID *** ✦ *** SISTEM INFORMASI *** ✦ *** KULIAH / PRAKTIKUM *** ✦ *** TUGAS &amp; DEADLINE *** ✦ *** UNIVERSITAS GUNADARMA *** ✦ *** SEMESTER 3 ***</span>
+                <span>*** 2KA22 SOLID *** ✦ *** SISTEM INFORMASI *** ✦ *** KULIAH / PRAKTIKUM *** ✦ *** TUGAS &amp; DEADLINE *** ✦ *** UNIVERSITAS GUNADARMA *** ✦ *** SEMESTER 3 ***</span>
+            </div>
+        </div>
+    </header><!-- end of page header -->
+
+    <section class="dashboard-widgets" id="dashboard-widgets" aria-label="Ringkasan kelas">
+        <div class="dashboard-widgets-heading">
+            <div>
+                <p class="section-subtitle">Ruang Kelas Digital</p>
+                <h2>Ringkasan Kelas 2KA22</h2>
+            </div>
+            <span class="semester-badge"><i class="ti-bookmark-alt" aria-hidden="true"></i> Semester 3</span>
+        </div>
+        <div class="dashboard-widget-grid">
+            <section class="dashboard-widget deadline-widget" aria-labelledby="deadline-title">
+                <div class="widget-heading">
+                    <span class="widget-icon"><i class="ti-alarm-clock" aria-hidden="true"></i></span>
+                    <div>
+                        <p class="widget-eyebrow">Jangan sampai terlewat</p>
+                        <h3 id="deadline-title">Deadline Terdekat</h3>
+                    </div>
+                </div>
+                <ul class="deadline-list">
+                    <li>
+                        <span class="deadline-dot" aria-hidden="true"></span>
+                        <span class="deadline-task">UTS Basis Data</span>
+                        <span class="deadline-time">2 hari lagi</span>
+                    </li>
+                    <li>
+                        <span class="deadline-dot" aria-hidden="true"></span>
+                        <span class="deadline-task">Pengumpulan Tugas Pemrograman</span>
+                        <span class="deadline-time">4 hari lagi</span>
+                    </li>
+                </ul>
+            </section>
+
+            <section class="dashboard-widget quick-access-widget" aria-labelledby="quick-access-title">
+                <div class="widget-heading">
+                    <span class="widget-icon"><i class="ti-bolt" aria-hidden="true"></i></span>
+                    <div>
+                        <p class="widget-eyebrow">Semua yang dibutuhkan</p>
+                        <h3 id="quick-access-title">Akses Cepat</h3>
+                    </div>
+                </div>
+                <div class="quick-access-list">
+                    <a href="https://drive.google.com/" target="_blank" rel="noopener noreferrer" title="Ganti dengan tautan folder materi kelas">
+                        <i class="ti-folder" aria-hidden="true"></i>
+                        <span>Materi Kuliah<small>Google Drive</small></span>
+                        <i class="ti-arrow-top-right" aria-hidden="true"></i>
+                    </a>
+                    <a href="https://chat.whatsapp.com/" target="_blank" rel="noopener noreferrer" title="Ganti dengan tautan undangan grup kelas">
+                        <i class="ti-comments" aria-hidden="true"></i>
+                        <span>Grup Kelas<small>WhatsApp</small></span>
+                        <i class="ti-arrow-top-right" aria-hidden="true"></i>
+                    </a>
+                    <a href="#portfolio">
+                        <i class="ti-image" aria-hidden="true"></i>
+                        <span>Galeri Dokumentasi<small>Aktivitas kelas</small></span>
+                        <i class="ti-arrow-top-right" aria-hidden="true"></i>
+                    </a>
+                </div>
+            </section>
+        </div>
+    </section>
+
+    <!-- about section -->
+    <section class="section pt-0" id="about">
+        <!-- container -->
+        <div class="container text-center">
+            <!-- about wrapper -->
+            <div class="about">
+                <div class="about-img-holder">
+                    <img src="assets/imgs/logo.jpeg" class="about-img">
+                </div>
+                <div class="about-caption">
+                    <p class="section-subtitle">Profil Kelas</p>
+                    <h2 class="section-title mb-3">Kekompakan Mahasiswa Sistem Informasi</h2>
+                    <p>
+                        Kelas perkuliahan Sistem Informasi merupakan ruang belajar yang menekankan kolaborasi, kedisiplinan, dan semangat akademik dalam menghadapi tantangan teknologi informasi. Kami terbentuk sebagai komunitas mahasiswa yang aktif dalam diskusi, pengembangan proyek, serta kegiatan kampus yang mendukung pembelajaran berbasis praktik.
+                        <br><br>
+                        Kehidupan kelas kami ditandai dengan kerja sama antar mahasiswa, saling mendukung dalam menyelesaikan tugas, serta semangat untuk terus belajar dan berkembang di bidang sistem informasi. Fokus utama kami bukan hanya pada nilai akademik, tetapi juga pada membangun karakter, komunikasi, dan kemampuan berpikir kritis untuk siap menghadapi dunia kerja serta perkembangan digital masa depan.
+                    </p>
+                    <a href="#contact" class="btn-rounded btn btn-outline-primary mt-4">Lihat Info Kuliah</a>
+                </div>
+            </div><!-- end of about wrapper -->
+        </div><!-- end of container -->
+    </section> <!-- end of about section -->
+
+    <!-- service section -->
+    <section class="section" id="service">
+        <div class="container text-center">
+            <p class="section-subtitle">Data Kelas</p>
+            <h6 class="section-title mb-6">Statistik Mahasiswa</h6>
+            <!-- row -->
+            <div class="row">
+                <div class="col-md-6 col-lg-3">
+                    <div class="service-card">
+                        <div class="body">
+                            <img src="assets/imgs/pencil-case.svg" class="icon">
+                            <h6 class="title">Total Mahasiswa Kelas</h6>
+                            <p class="subtitle">48 mahasiswa aktif dalam satu kelas perkuliahan Sistem Informasi.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="service-card">
+                        <div class="body">
+                            <img src="assets/imgs/responsive.svg" class="icon">
+                            <h6 class="title">Mahasiswa Laki-laki</h6>
+                            <p class="subtitle">Terdapat 23 mahasiswa laki-laki yang aktif dalam kegiatan akademik.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="service-card">
+                        <div class="body">
+                            <img src="assets/imgs/toolbox.svg" class="icon">
+                            <h6 class="title">Mahasiswa Perempuan</h6>
+                            <p class="subtitle">Terdapat 25 mahasiswa perempuan dengan semangat belajar yang tinggi.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="service-card">
+                        <div class="body">
+                            <img src="assets/imgs/analytics.svg" class="icon">
+                            <h6 class="title">Jumlah Kelompok / Project Team</h6>
+                            <p class="subtitle">Kelas kami terbagi dalam 6 kelompok project yang aktif dalam tugas kolaboratif.</p>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- end of row -->
+        </div>
+    </section><!-- end of service section -->
+
+    <!-- schedule section -->
+    <section class="section schedule-section" id="jadwal">
+        <div class="container text-center">
+            <p class="section-subtitle">Informasi Akademik · Kelas 2KA22</p>
+            <h2 class="section-title mb-2">Jadwal Kuliah</h2>
+            <p class="schedule-subtitle">Jadwal Mata Kuliah Semester Ini</p>
+            <div class="schedule-table-wrapper">
+                <table class="schedule-table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Hari</th>
+                            <th scope="col">Waktu</th>
+                            <th scope="col">Mata Kuliah</th>
+                            <th scope="col">Ruang</th>
+                            <th scope="col">Dosen Pengampu</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td data-label="Hari">Senin</td>
+                            <td data-label="Waktu">-</td>
+                            <td data-label="Mata Kuliah">Komputasi Big Data</td>
+                            <td data-label="Ruang">UGTV</td>
+                            <td data-label="Dosen Pengampu">Team Teaching</td>
+                        </tr>
+                        <tr>
+                            <td data-label="Hari">Rabu</td>
+                            <td data-label="Waktu">2/3/4</td>
+                            <td data-label="Mata Kuliah">Sistem Basis Data 1 **</td>
+                            <td data-label="Ruang">J123</td>
+                            <td data-label="Dosen Pengampu">Metty Mustikasari</td>
+                        </tr>
+                        <tr>
+                            <td data-label="Hari">Rabu</td>
+                            <td data-label="Waktu">7/8</td>
+                            <td data-label="Mata Kuliah">Bahasa Inggris</td>
+                            <td data-label="Ruang">J1415</td>
+                            <td data-label="Dosen Pengampu">Ariza Purnawati</td>
+                        </tr>
+                        <tr>
+                            <td data-label="Hari">Rabu</td>
+                            <td data-label="Waktu">9/10</td>
+                            <td data-label="Mata Kuliah">Peng. Org. &amp; Arst Komputer</td>
+                            <td data-label="Ruang">J1415</td>
+                            <td data-label="Dosen Pengampu">Debyo Saptono</td>
+                        </tr>
+                        <tr>
+                            <td data-label="Hari">Kamis</td>
+                            <td data-label="Waktu">1/2</td>
+                            <td data-label="Mata Kuliah">Manajemen &amp; SIM 1 *</td>
+                            <td data-label="Ruang">J1116</td>
+                            <td data-label="Dosen Pengampu">Budi Utami Fahnun</td>
+                        </tr>
+                        <tr>
+                            <td data-label="Hari">Kamis</td>
+                            <td data-label="Waktu">3/4</td>
+                            <td data-label="Mata Kuliah">Teknik Pemrog. Terstruktur **</td>
+                            <td data-label="Ruang">J1116</td>
+                            <td data-label="Dosen Pengampu">Indah Sinthya Permata Sari</td>
+                        </tr>
+                        <tr>
+                            <td data-label="Hari">Jum'at</td>
+                            <td data-label="Waktu">3/4</td>
+                            <td data-label="Mata Kuliah">Praktikum Komputasi Big Data</td>
+                            <td data-label="Ruang">-</td>
+                            <td data-label="Dosen Pengampu">Tim Dosen</td>
+                        </tr>
+                        <tr>
+                            <td data-label="Hari">Jum'at</td>
+                            <td data-label="Waktu">7/8</td>
+                            <td data-label="Mata Kuliah">Matematika Sistem Informasi 1</td>
+                            <td data-label="Ruang">J144</td>
+                            <td data-label="Dosen Pengampu">Maria Y Aryati Wahyuningrum</td>
+                        </tr>
+                        <tr>
+                            <td data-label="Hari">Jum'at</td>
+                            <td data-label="Waktu">9/10</td>
+                            <td data-label="Mata Kuliah">Matematika Lanjut 1 /*</td>
+                            <td data-label="Ruang">J144</td>
+                            <td data-label="Dosen Pengampu">Tri Handhika</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="schedule-note">Jadwal perkuliahan kelas 2KA22.</p>
+        </div>
+    </section><!-- end of schedule section -->
+
+    <!-- portfolio section -->
+    <section class="section" id="portfolio">
+        <div class="container text-center">
+            <p class="section-subtitle">Kegiatan Kelas</p>
+            <h6 class="section-title mb-6">Aktivitas dan Kebersamaan</h6>
+            <!-- row -->
+            <div class="row">
+                <div class="col-md-4">
+                    <a href="#" class="portfolio-card">
+                        <img src="assets/imgs/loh ya boleh wong ditawari.jpeg" class="portfolio-card-img">
+                        <span class="portfolio-card-overlay">
+                            <span class="portfolio-card-caption">
+                                <h4>Diskusi Kelompok</h4>
+                                <p class="font-weight-normal">Mahasiswa berdiskusi dalam pembagian tugas project dan pemecahan masalah.</p>
+                            </span>
+                        </span>
+                    </a>
+                </div>
+                <div class="col-md-4">
+                    <a href="#" class="portfolio-card">
+                        <img class="portfolio-card-img" src="assets/imgs/download (6).jpeg" class="img-responsive rounded">
+                        <span class="portfolio-card-overlay">
+                            <span class="portfolio-card-caption">
+                                <h4>Foto Kelas</h4>
+                                <p class="font-weight-normal">Kebersamaan mahasiswa Sistem Informasi dalam suasana belajar yang harmonis.</p>
+                            </span>
+                        </span>
+                    </a>
+                </div>
+                <div class="col-md-4">
+                    <a href="#" class="portfolio-card">
+                        <img class="portfolio-card-img" src="assets/imgs/GILA KAMU.jpeg" class="img-responsive rounded">
+                        <span class="portfolio-card-overlay">
+                            <span class="portfolio-card-caption">
+                                <h4>Kolaborasi Project</h4>
+                                <p class="font-weight-normal">Setiap tim bekerja sama untuk menyelesaikan tugas dan inovasi teknologi.</p>
+                            </span>
+                        </span>
+                    </a>
+                </div>
+            </div><!-- end of row -->
+        </div><!-- end of container -->
+    </section> <!-- end of portfolio section -->
+
+    <!-- class officers section -->
+    <section class="section team-section" id="pricing">
+        <div class="container text-center">
+            <p class="section-subtitle">Struktur Kelas 2KA22</p>
+            <h2 class="section-title mb-6">Struktur Pengurus Kelas</h2>
+            <div class="team-grid">
+                <article class="team-card">
+                    <div class="team-card-avatar">
+                        <img src="assets/jpg/dosen-pa.jpg" alt="Foto Dosen Pembimbing Akademik">
+                    </div>
+                    <h3 class="team-card-name">Maria Y Aryati Wahyuningrum</h3>
+                    <p class="team-card-role">Dosen Pembimbing Akademik (PA)</p>
+                    <p class="team-card-description">Mendampingi mahasiswa dalam proses akademik dan membantu merencanakan studi agar berjalan efektif dan terarah.</p>
+                    <a href="#contact" class="team-card-button">Kontak PA</a>
+                </article>
+
+                <article class="team-card team-card--featured">
+                    <div class="team-card-avatar">
+                        <img src="assets/jpg/ketua-kelas.jpg" alt="Foto Ketua Kelas">
+                    </div>
+                    <h3 class="team-card-name">Alisya</h3>
+                    <p class="team-card-role">Ketua Kelas</p>
+                    <p class="team-card-description">Mengkoordinasikan kegiatan kelas dan menjadi penghubung komunikasi antara dosen dan mahasiswa.</p>
+                    <a href="#contact" class="team-card-button">Lihat Profil</a>
+                </article>
+
+                <article class="team-card">
+                    <div class="team-card-avatar">
+                        <img src="assets/jpg/sekretaris.jpg" alt="Foto Sekretaris Kelas">
+                    </div>
+                    <h3 class="team-card-name">- &amp; -</h3>
+                    <p class="team-card-role">Sekretaris</p>
+                    <p class="team-card-description">Mengelola administrasi, membantu menyiapkan rapat, serta mencatat dan mendokumentasikan informasi serta kegiatan kelas.</p>
+                    <a href="#contact" class="team-card-button">Detail</a>
+                </article>
+            </div>
+        </div>
+    </section><!-- end of class officers section -->
+
+    <!-- section -->
+    <section class="section-sm bg-primary">
+        <!-- container -->
+        <div class="container text-center text-sm-left">
+            <!-- row -->
+            <div class="row align-items-center">
+                <div class="col-sm offset-md-1 mb-4 mb-md-0">
+                    <h6 class="title text-light"></h6>
+                    <p class="m-0 text-light"></p>
+                </div>
+                <div class="col-sm offset-sm-2 offset-md-3">
+                    
+                </div>
+            </div> <!-- end of row -->
+        </div> <!-- end of container -->
+    </section> <!-- end of section -->
+
+    <!-- testimonial section -->
+    
+
+    <!-- blog section -->
+   
+
+    <!-- contact section -->
+    <section class="section" id="contact">
+        <div class="container text-center">
+            <p class="section-subtitle">Kritik &amp; Saran</p>
+            <h6 class="section-title mb-5">Kotak Aspirasi &amp; Masukan Kelas</h6>
+            <!-- contact form -->
+            <form action="" class="contact-form col-md-10 col-lg-8 m-auto">
+                <div class="form-row">
+                    <div class="form-group col-sm-6">
+                        <input type="text" size="50" class="form-control" placeholder="Nama Anda" required>
+                    </div>
+                    <div class="form-group col-sm-6">
+                        <input type="email" class="form-control" placeholder="Email Anda" requried>
+                    </div>
+                    <div class="form-group col-sm-12">
+                        <textarea name="comment" id="comment" rows="6" class="form-control"
+                            placeholder="Tulis aspirasi, saran, atau masukan untuk kelas..."></textarea>
+                    </div>
+                    <div class="form-group col-sm-12 mt-3">
+                        <input type="submit" value="Kirim Pesan" class="btn btn-outline-primary rounded">
+                    </div>
+                </div>
+            </form><!-- end of contact form -->
+        </div><!-- end of container -->
+    </section><!-- end of contact section -->
+
+    <!-- footer -->
+    <div class="container">
+        <footer class="footer">
+            <p class="mb-0">Copyright
+                <script>document.write(new Date().getFullYear())</script> &copy; <a href="#">Sistem Informasi</a> Angkatan 2025 <a href="#">Universitas Gunadarma</a>
+            </p>
+            <div class="social-links text-right m-auto ml-sm-auto">
+                <a href="https://www.facebook.com/profile.php?id=100063777891714" class="link"><i class="ti-facebook"></i></a>
+                <a href="" class="link"><i class="ti-twitter-alt"></i></a>
+                <a href="https://youtu.be/w1Jqo38wHbw?si=Rs9Ybv7a6Xs7xqsb" class="link"><i class="ti-youtube"></i></a>
+                <a href="https://www.instagram.com/tekajehbeee?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" class="link"><i class="ti-instagram"></i></a>
+            </div>
+        </footer>
+    </div> <!-- end of page footer -->
+    </main>
+
+    <!-- core  -->
+    <script src="assets/vendors/jquery/jquery-3.4.1.js"></script>
+    <script src="assets/vendors/bootstrap/bootstrap.bundle.js"></script>
+
+    <!-- bootstrap 3 affix -->
+    <script src="assets/vendors/bootstrap/bootstrap.affix.js"></script>
+
+    <!-- style js -->
+    <script src="assets/js/style.js"></script>
+
+</body>
+
+</html>
