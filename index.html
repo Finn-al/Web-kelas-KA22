@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" data-theme="light">
 
 <head>
     <meta charset="utf-8">
@@ -15,6 +15,12 @@
 
 <body data-spy="scroll" data-target=".navbar" data-offset="40" id="dashboard">
 
+    <div class="theme-wave" id="theme-wave" aria-hidden="true">
+        <svg viewBox="0 0 2000 1000" preserveAspectRatio="none" focusable="false">
+            <path d="M0 0H1220C1110 100 1330 200 1220 300C1110 400 1330 500 1220 600C1110 700 1330 800 1220 900C1180 940 1200 975 1220 1000H0Z"></path>
+        </svg>
+    </div>
+
     <aside class="dashboard-sidebar" aria-label="Navigasi kelas 2KA22">
         <a class="dashboard-brand" href="#home">
             <span class="dashboard-brand-mark">2K</span>
@@ -26,11 +32,23 @@
         <p class="sidebar-label">MENU UTAMA</p>
         <nav class="sidebar-menu" aria-label="Navigasi dashboard">
             <a href="#home"><i class="ti-home" aria-hidden="true"></i><span>Dashboard</span></a>
+            <a href="#data-mahasiswa"><i class="ti-user" aria-hidden="true"></i><span>Data Mahasiswa</span></a>
             <a href="#jadwal"><i class="ti-calendar" aria-hidden="true"></i><span>Jadwal Kuliah</span></a>
             <a href="#dashboard-widgets"><i class="ti-book" aria-hidden="true"></i><span>Tugas &amp; Materi</span></a>
             <a href="#about"><i class="ti-info-alt" aria-hidden="true"></i><span>Informasi Kelas</span></a>
             <a href="#contact"><i class="ti-comment-alt" aria-hidden="true"></i><span>Kotak Aspirasi</span></a>
         </nav>
+        <button class="theme-toggle theme-toggle--sidebar" type="button" data-theme-toggle
+            aria-label="Aktifkan mode gelap" aria-pressed="false">
+            <svg class="theme-icon theme-icon--moon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M20.5 14.2A8.7 8.7 0 0 1 9.8 3.5 8.7 8.7 0 1 0 20.5 14.2Z"></path>
+            </svg>
+            <svg class="theme-icon theme-icon--sun" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <circle cx="12" cy="12" r="4"></circle>
+                <path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"></path>
+            </svg>
+            <span>Mode Gelap</span>
+        </button>
         <a class="sidebar-login" href="login.html"><i class="ti-user" aria-hidden="true"></i> Login</a>
         <div class="sidebar-footer">Universitas Gunadarma<br>FIKTI · 2KA22</div>
     </aside>
@@ -49,6 +67,9 @@
                     <a class="link" href="#about">Tentang</a>
                 </li>
                 <li class="item">
+                    <a class="link" href="#data-mahasiswa">Data Mahasiswa</a>
+                </li>
+                <li class="item">
                     <a class="link" href="#jadwal">Jadwal Kuliah</a>
                 </li>
                 <li class="item">
@@ -61,6 +82,17 @@
                     <a href="login.html" class="btn btn-primary">Login</a>
                 </li>
             </ul>
+            <button class="theme-toggle theme-toggle--mobile" type="button" data-theme-toggle
+                aria-label="Aktifkan mode gelap" aria-pressed="false" title="Aktifkan mode gelap">
+                <svg class="theme-icon theme-icon--moon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <path d="M20.5 14.2A8.7 8.7 0 0 1 9.8 3.5 8.7 8.7 0 1 0 20.5 14.2Z"></path>
+                </svg>
+                <svg class="theme-icon theme-icon--sun" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <circle cx="12" cy="12" r="4"></circle>
+                    <path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"></path>
+                </svg>
+                <span class="sr-only">Mode Gelap</span>
+            </button>
             <a href="javascript:void(0)" id="nav-toggle" class="hamburger hamburger--elastic"
                 aria-controls="primary-nav" aria-expanded="false" aria-label="Buka navigasi">
                 <div class="hamburger-box">
@@ -185,7 +217,7 @@
                         <div class="body">
                             <img src="assets/imgs/pencil-case.svg" class="icon">
                             <h6 class="title">Total Mahasiswa Kelas</h6>
-                            <p class="subtitle">48 mahasiswa aktif dalam satu kelas perkuliahan Sistem Informasi.</p>
+                            <p class="subtitle">34 mahasiswa terdaftar di kelas perkuliahan Sistem Informasi.</p>
                         </div>
                     </div>
                 </div>
@@ -194,7 +226,7 @@
                         <div class="body">
                             <img src="assets/imgs/responsive.svg" class="icon">
                             <h6 class="title">Mahasiswa Laki-laki</h6>
-                            <p class="subtitle">Terdapat 23 mahasiswa laki-laki yang aktif dalam kegiatan akademik.</p>
+                            <p class="subtitle">Terdapat 28 mahasiswa laki-laki yang aktif dalam kegiatan akademik.</p>
                         </div>
                     </div>
                 </div>
@@ -203,7 +235,7 @@
                         <div class="body">
                             <img src="assets/imgs/toolbox.svg" class="icon">
                             <h6 class="title">Mahasiswa Perempuan</h6>
-                            <p class="subtitle">Terdapat 25 mahasiswa perempuan dengan semangat belajar yang tinggi.</p>
+                            <p class="subtitle">Terdapat 6 mahasiswa perempuan dengan semangat belajar yang tinggi.</p>
                         </div>
                     </div>
                 </div>
@@ -219,6 +251,122 @@
             </div><!-- end of row -->
         </div>
     </section><!-- end of service section -->
+
+    <!-- student roster section -->
+    <section class="section student-section" id="data-mahasiswa">
+        <div class="student-container">
+            <div class="student-heading">
+                <div>
+                    <p class="section-subtitle">Portal Kelas 2KA22</p>
+                    <h2 class="section-title">Data Mahasiswa Kelas</h2>
+                    <p class="student-subtitle">Daftar Lengkap dan Informasi Anggota Kelas 2KA22</p>
+                </div>
+                <div class="student-stats" aria-label="Statistik mahasiswa">
+                    <div class="student-stat">
+                        <span class="student-stat-icon"><i class="ti-user" aria-hidden="true"></i></span>
+                        <span><strong>34</strong><small>Total Mahasiswa</small></span>
+                    </div>
+                    <div class="student-stat">
+                        <span class="student-stat-icon student-stat-icon--male"><i class="ti-user" aria-hidden="true"></i></span>
+                        <span><strong>28</strong><small>Laki-laki</small></span>
+                    </div>
+                    <div class="student-stat">
+                        <span class="student-stat-icon student-stat-icon--female"><i class="ti-user" aria-hidden="true"></i></span>
+                        <span><strong>6</strong><small>Perempuan</small></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="student-card">
+                <div class="student-toolbar">
+                    <label class="student-search">
+                        <i class="ti-search" aria-hidden="true"></i>
+                        <input type="search" id="student-search" placeholder="Cari nama atau NIM..." aria-label="Cari nama atau NIM mahasiswa">
+                    </label>
+                    <label class="student-filter-label" for="student-filter">Kelas asal</label>
+                    <select class="student-filter" id="student-filter" aria-label="Filter berdasarkan kelas asal">
+                        <option value="">Semua Kelas Asal</option>
+                        <option value="1KA21">1KA21</option>
+                        <option value="1KA22">1KA22</option>
+                        <option value="1KA23">1KA23</option>
+                    </select>
+                </div>
+
+                <div class="student-table-wrap">
+                    <table class="student-table">
+                        <thead>
+                            <tr>
+                                <th scope="col">No</th>
+                                <th scope="col">NIM</th>
+                                <th scope="col">Nama Lengkap</th>
+                                <th scope="col">Kelas Asal</th>
+                                <th scope="col">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="student-table-body">
+                            <tr><td data-label="No">1</td><td data-label="NIM">10125014</td><td data-label="Nama Lengkap">ADAM HAIDAR ALI</td><td data-label="Kelas Asal"><span class="student-class-badge">1KA21</span></td><td data-label="Aksi"><button class="student-detail-button" type="button">Detail</button></td></tr>
+                            <tr><td data-label="No">2</td><td data-label="NIM">10125026</td><td data-label="Nama Lengkap">ADITYA PRASOJO</td><td data-label="Kelas Asal"><span class="student-class-badge">1KA22</span></td><td data-label="Aksi"><button class="student-detail-button" type="button">Detail</button></td></tr>
+                            <tr><td data-label="No">3</td><td data-label="NIM">10125033</td><td data-label="Nama Lengkap">AHMAD ALFIANSAH</td><td data-label="Kelas Asal"><span class="student-class-badge">1KA23</span></td><td data-label="Aksi"><button class="student-detail-button" type="button">Detail</button></td></tr>
+                            <tr><td data-label="No">4</td><td data-label="NIM">10125062</td><td data-label="Nama Lengkap">ALEXANDER RAFY BUSTANIL ARIFIN</td><td data-label="Kelas Asal"><span class="student-class-badge">1KA22</span></td><td data-label="Aksi"><button class="student-detail-button" type="button">Detail</button></td></tr>
+                            <tr><td data-label="No">5</td><td data-label="NIM">10125081</td><td data-label="Nama Lengkap">ALISYAH FEBRIANA</td><td data-label="Kelas Asal"><span class="student-class-badge">1KA21</span></td><td data-label="Aksi"><button class="student-detail-button" type="button">Detail</button></td></tr>
+                            <tr><td data-label="No">6</td><td data-label="NIM">10125101</td><td data-label="Nama Lengkap">AMRU TYO ATHALLAH</td><td data-label="Kelas Asal"><span class="student-class-badge">1KA21</span></td><td data-label="Aksi"><button class="student-detail-button" type="button">Detail</button></td></tr>
+                            <tr><td data-label="No">7</td><td data-label="NIM">10125196</td><td data-label="Nama Lengkap">BILLY PHAN WINARTA</td><td data-label="Kelas Asal"><span class="student-class-badge">1KA21</span></td><td data-label="Aksi"><button class="student-detail-button" type="button">Detail</button></td></tr>
+                            <tr><td data-label="No">8</td><td data-label="NIM">10125214</td><td data-label="Nama Lengkap">CHIKO HANIF KHAIDAR</td><td data-label="Kelas Asal"><span class="student-class-badge">1KA23</span></td><td data-label="Aksi"><button class="student-detail-button" type="button">Detail</button></td></tr>
+                            <tr><td data-label="No">9</td><td data-label="NIM">10125232</td><td data-label="Nama Lengkap">DARU RAHMAT ANGGORO</td><td data-label="Kelas Asal"><span class="student-class-badge">1KA22</span></td><td data-label="Aksi"><button class="student-detail-button" type="button">Detail</button></td></tr>
+                            <tr><td data-label="No">10</td><td data-label="NIM">10125322</td><td data-label="Nama Lengkap">FARDHAN AL-JAUZI</td><td data-label="Kelas Asal"><span class="student-class-badge">1KA22</span></td><td data-label="Aksi"><button class="student-detail-button" type="button">Detail</button></td></tr>
+                            <tr><td data-label="No">11</td><td data-label="NIM">10125326</td><td data-label="Nama Lengkap">FAREL RASYA FAIRUZ</td><td data-label="Kelas Asal"><span class="student-class-badge">1KA23</span></td><td data-label="Aksi"><button class="student-detail-button" type="button">Detail</button></td></tr>
+                            <tr><td data-label="No">12</td><td data-label="NIM">10125339</td><td data-label="Nama Lengkap">FARREL PUTRA RAFASYA</td><td data-label="Kelas Asal"><span class="student-class-badge">1KA21</span></td><td data-label="Aksi"><button class="student-detail-button" type="button">Detail</button></td></tr>
+                            <tr><td data-label="No">13</td><td data-label="NIM">10125375</td><td data-label="Nama Lengkap">GENDHIS KINANTI NURCAHYANI</td><td data-label="Kelas Asal"><span class="student-class-badge">1KA21</span></td><td data-label="Aksi"><button class="student-detail-button" type="button">Detail</button></td></tr>
+                            <tr><td data-label="No">14</td><td data-label="NIM">10125403</td><td data-label="Nama Lengkap">HANA NABIGHAH SALSABILA</td><td data-label="Kelas Asal"><span class="student-class-badge">1KA22</span></td><td data-label="Aksi"><button class="student-detail-button" type="button">Detail</button></td></tr>
+                            <tr><td data-label="No">15</td><td data-label="NIM">10125405</td><td data-label="Nama Lengkap">HANDIKA PUTRA PRATAMA</td><td data-label="Kelas Asal"><span class="student-class-badge">1KA23</span></td><td data-label="Aksi"><button class="student-detail-button" type="button">Detail</button></td></tr>
+                            <tr><td data-label="No">16</td><td data-label="NIM">10125498</td><td data-label="Nama Lengkap">LUTHFI SADAD</td><td data-label="Kelas Asal"><span class="student-class-badge">1KA21</span></td><td data-label="Aksi"><button class="student-detail-button" type="button">Detail</button></td></tr>
+                            <tr><td data-label="No">17</td><td data-label="NIM">10125500</td><td data-label="Nama Lengkap">M RAFA FERHANANDA</td><td data-label="Kelas Asal"><span class="student-class-badge">1KA22</span></td><td data-label="Aksi"><button class="student-detail-button" type="button">Detail</button></td></tr>
+                            <tr><td data-label="No">18</td><td data-label="NIM">10125523</td><td data-label="Nama Lengkap">MEISYA DWI PUTRI</td><td data-label="Kelas Asal"><span class="student-class-badge">1KA21</span></td><td data-label="Aksi"><button class="student-detail-button" type="button">Detail</button></td></tr>
+                            <tr><td data-label="No">19</td><td data-label="NIM">10125548</td><td data-label="Nama Lengkap">MOHAMMAD GIVARRY NURHIDAYAT</td><td data-label="Kelas Asal"><span class="student-class-badge">1KA22</span></td><td data-label="Aksi"><button class="student-detail-button" type="button">Detail</button></td></tr>
+                            <tr><td data-label="No">20</td><td data-label="NIM">10125549</td><td data-label="Nama Lengkap">MOHAMMAD HAFIZD ALIEF</td><td data-label="Kelas Asal"><span class="student-class-badge">1KA23</span></td><td data-label="Aksi"><button class="student-detail-button" type="button">Detail</button></td></tr>
+                            <tr><td data-label="No">21</td><td data-label="NIM">10125618</td><td data-label="Nama Lengkap">MUHAMMAD DAFY AL FATHIR</td><td data-label="Kelas Asal"><span class="student-class-badge">1KA21</span></td><td data-label="Aksi"><button class="student-detail-button" type="button">Detail</button></td></tr>
+                            <tr><td data-label="No">22</td><td data-label="NIM">10125652</td><td data-label="Nama Lengkap">MUHAMMAD GERALDINOASTRO DEFAND</td><td data-label="Kelas Asal"><span class="student-class-badge">1KA22</span></td><td data-label="Aksi"><button class="student-detail-button" type="button">Detail</button></td></tr>
+                            <tr><td data-label="No">23</td><td data-label="NIM">10125663</td><td data-label="Nama Lengkap">MUHAMMAD HUSNAN MARZUKI</td><td data-label="Kelas Asal"><span class="student-class-badge">1KA23</span></td><td data-label="Aksi"><button class="student-detail-button" type="button">Detail</button></td></tr>
+                            <tr><td data-label="No">24</td><td data-label="NIM">10125702</td><td data-label="Nama Lengkap">MUHAMMAD RAFI SATRIO</td><td data-label="Kelas Asal"><span class="student-class-badge">1KA21</span></td><td data-label="Aksi"><button class="student-detail-button" type="button">Detail</button></td></tr>
+                            <tr><td data-label="No">25</td><td data-label="NIM">11125138</td><td data-label="Nama Lengkap">NABIL FAKHRI AL MUIZ</td><td data-label="Kelas Asal"><span class="student-class-badge">1KA23</span></td><td data-label="Aksi"><button class="student-detail-button" type="button">Detail</button></td></tr>
+                            <tr><td data-label="No">26</td><td data-label="NIM">10125753</td><td data-label="Nama Lengkap">NABIL FAKHRIYYAH TAAMIM</td><td data-label="Kelas Asal"><span class="student-class-badge">1KA22</span></td><td data-label="Aksi"><button class="student-detail-button" type="button">Detail</button></td></tr>
+                            <tr><td data-label="No">27</td><td data-label="NIM">10125821</td><td data-label="Nama Lengkap">NOVAL FARAUQ TRIASA PANGALILA</td><td data-label="Kelas Asal"><span class="student-class-badge">1KA23</span></td><td data-label="Aksi"><button class="student-detail-button" type="button">Detail</button></td></tr>
+                            <tr><td data-label="No">28</td><td data-label="NIM">10125945</td><td data-label="Nama Lengkap">REVALINA AMELIA FEBRIANTI</td><td data-label="Kelas Asal"><span class="student-class-badge">1KA22</span></td><td data-label="Aksi"><button class="student-detail-button" type="button">Detail</button></td></tr>
+                            <tr><td data-label="No">29</td><td data-label="NIM">10125957</td><td data-label="Nama Lengkap">RIDHO ARIF SAPUTRA</td><td data-label="Kelas Asal"><span class="student-class-badge">1KA23</span></td><td data-label="Aksi"><button class="student-detail-button" type="button">Detail</button></td></tr>
+                            <tr><td data-label="No">30</td><td data-label="NIM">10125975</td><td data-label="Nama Lengkap">RIVALDI HERMAWAN</td><td data-label="Kelas Asal"><span class="student-class-badge">1KA22</span></td><td data-label="Aksi"><button class="student-detail-button" type="button">Detail</button></td></tr>
+                            <tr><td data-label="No">31</td><td data-label="NIM">10125990</td><td data-label="Nama Lengkap">RYAN HAFIZH ZAHRAN</td><td data-label="Kelas Asal"><span class="student-class-badge">1KA23</span></td><td data-label="Aksi"><button class="student-detail-button" type="button">Detail</button></td></tr>
+                            <tr><td data-label="No">32</td><td data-label="NIM">11125011</td><td data-label="Nama Lengkap">SATRIA GALIH RAMADHAN</td><td data-label="Kelas Asal"><span class="student-class-badge">1KA21</span></td><td data-label="Aksi"><button class="student-detail-button" type="button">Detail</button></td></tr>
+                            <tr><td data-label="No">33</td><td data-label="NIM">11125086</td><td data-label="Nama Lengkap">VALLEN KAGUASEHI</td><td data-label="Kelas Asal"><span class="student-class-badge">1KA22</span></td><td data-label="Aksi"><button class="student-detail-button" type="button">Detail</button></td></tr>
+                            <tr><td data-label="No">34</td><td data-label="NIM">11125094</td><td data-label="Nama Lengkap">VIVIA CHINZIANI AZAHRA</td><td data-label="Kelas Asal"><span class="student-class-badge">1KA21</span></td><td data-label="Aksi"><button class="student-detail-button" type="button">Detail</button></td></tr>
+                        </tbody>
+                    </table>
+                    <p class="student-empty-state" id="student-empty-state" hidden>Tidak ada mahasiswa yang cocok dengan pencarian atau filter.</p>
+                </div>
+
+                <div class="student-table-footer">
+                    <p class="student-table-info" id="student-table-info" aria-live="polite"></p>
+                    <nav class="student-pagination" aria-label="Halaman daftar mahasiswa">
+                        <button type="button" id="student-prev" class="student-page-button">Sebelumnya</button>
+                        <span id="student-page-indicator" class="student-page-indicator" aria-live="polite"></span>
+                        <button type="button" id="student-next" class="student-page-button">Selanjutnya</button>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </section><!-- end of student roster section -->
+
+    <dialog class="student-dialog" id="student-detail-dialog" aria-labelledby="student-dialog-title">
+        <div class="student-dialog-content">
+            <button type="button" class="student-dialog-close" id="student-dialog-close" aria-label="Tutup detail">&times;</button>
+            <p class="section-subtitle">Profil Mahasiswa 2KA22</p>
+            <h2 id="student-dialog-title">Detail Mahasiswa</h2>
+            <dl class="student-detail-list">
+                <div><dt>NIM</dt><dd id="student-detail-nim"></dd></div>
+                <div><dt>Nama Lengkap</dt><dd id="student-detail-name"></dd></div>
+                <div><dt>Kelas Asal</dt><dd id="student-detail-class"></dd></div>
+            </dl>
+        </div>
+    </dialog>
 
     <!-- schedule section -->
     <section class="section schedule-section" id="jadwal">

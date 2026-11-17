@@ -1,79 +1,151 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Login/Signup Form</title>
-  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css">
+  <title>Masuk atau Daftar | 2KA22</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://unicons.iconscout.com/release/v2.1.9/css/unicons.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/login.css" />
 </head>
 
 <body>
-  
-  <div class="section">
-    <div class="container">
-      <div class="row full-height justify-content-center">
-        <div class="col-12 text-center align-self-center py-5">
-          <div class="section pb-5 pt-5 pt-sm-2 text-center">
-            <h6 class="mb-0 pb-3">
-              <span>Log In </span>
-              <span>Sign Up</span>
-            </h6>
-            <input class="checkbox" type="checkbox" id="reg-log" name="reg-log"/>
-            <label for="reg-log"></label>
+  <main class="auth-page">
+    <div class="auth-switcher">
+      <input class="auth-toggle" type="checkbox" id="auth-toggle" aria-label="Beralih antara Login dan Sign Up">
+      <div class="auth-mode-labels" aria-hidden="true">
+        <span>LOG IN</span>
+        <span>SIGN UP</span>
+      </div>
+      <label class="auth-switch" for="auth-toggle" aria-hidden="true"></label>
 
-            <div class="card-3d-wrap mx-auto">
-              <div class="card-3d-wrapper">
-                <div class="card-front">
-                  <div class="center-wrap">
-                    <div class="section text-center">
-                      <h4 class="mb-4 pb-3">Log In</h4>
-                      <div class="form-group">
-                        <input type="email" name="logemail" class="form-style" placeholder="Your Email" id="logemail" autocomplete="off">
-                        <i class="input-icon uil uil-at"></i>
-                      </div>  
-                      <div class="form-group mt-2">
-                        <input type="password" name="logpass" class="form-style" placeholder="Your Password" id="logpass" autocomplete="off">
-                        <i class="input-icon uil uil-lock-alt"></i>
-                      </div>
-                      <a href="index.html" class="btn mt-4">submit</a>
-                        <p class="mb-0 mt-4 text-center">
-                          <a href="#0" class="link">Forgot your password?</a>
-                        </p>
-                    </div>
+      <div class="auth-card-wrap">
+        <div class="auth-card-flip">
+          <section class="auth-card auth-card--login" id="login" aria-labelledby="login-title">
+            <p class="auth-brand">2KA22</p>
+            <h1 id="login-title">Selamat Datang Kembali</h1>
+            <p class="auth-description">Masuk ke akun Anda</p>
+
+            <div class="auth-providers" aria-label="Pilihan masuk">
+              <button class="auth-provider" type="button" data-provider="Google">
+                <span class="google-mark" aria-hidden="true">G</span>Google
+              </button>
+              <button class="auth-provider" type="button" data-provider="GitHub">
+                <i class="uil uil-github" aria-hidden="true"></i>GitHub
+              </button>
+            </div>
+
+            <div class="auth-divider"><span>atau masuk dengan NIM</span></div>
+
+            <form id="login-form">
+              <label class="auth-label" for="login-nim">NIM</label>
+              <div class="form-group auth-input-group">
+                <input class="form-style" type="text" id="login-nim" name="nim"
+                  placeholder="Masukkan NIM" inputmode="numeric" autocomplete="username"
+                  pattern="[0-9]{8}" minlength="8" maxlength="8"
+                  title="NIM harus terdiri dari 8 digit." required>
+                <i class="input-icon uil uil-user" aria-hidden="true"></i>
+              </div>
+
+              <label class="auth-label" for="login-password">Password</label>
+              <div class="form-group auth-input-group">
+                <input class="form-style" type="password" id="login-password" name="password"
+                  placeholder="Masukkan password" autocomplete="current-password" required>
+                <i class="input-icon uil uil-lock-alt" aria-hidden="true"></i>
+                <button class="password-toggle" type="button" data-password-toggle="login-password"
+                  aria-label="Tampilkan password"><i class="uil uil-eye" aria-hidden="true"></i></button>
+              </div>
+
+              <div class="auth-options">
+                <label class="remember-option"><input type="checkbox" name="remember"> Ingat saya</label>
+                <a class="auth-link" href="forgot-password.html">Lupa password?</a>
+              </div>
+
+              <button class="btn auth-submit" type="submit">Masuk</button>
+              <p class="auth-notice" role="status" aria-live="polite" hidden></p>
+            </form>
+
+            <p class="auth-footer">Belum punya akun?
+              <button class="auth-link auth-switch-text" type="button" data-auth-state="signup">Buat akun baru</button>
+            </p>
+          </section>
+
+          <section class="auth-card auth-card--signup" id="signup" aria-labelledby="signup-title" aria-hidden="true" inert>
+            <p class="auth-brand">2KA22</p>
+            <h2 id="signup-title">Buat Akun Baru</h2>
+            <p class="auth-description">Bergabunglah dengan kelas 2KA22</p>
+
+            <div class="auth-providers" aria-label="Pilihan daftar">
+              <button class="auth-provider" type="button" data-provider="Google">
+                <span class="google-mark" aria-hidden="true">G</span>Google
+              </button>
+              <button class="auth-provider" type="button" data-provider="GitHub">
+                <i class="uil uil-github" aria-hidden="true"></i>GitHub
+              </button>
+            </div>
+
+            <div class="auth-divider"><span>atau daftar dengan email</span></div>
+
+            <form id="signup-form">
+              <div class="auth-name-row">
+                <div>
+                  <label class="auth-label" for="first-name">Nama depan</label>
+                  <div class="form-group auth-input-group">
+                    <input class="form-style" type="text" id="first-name" name="firstName"
+                      placeholder="Nama depan" autocomplete="given-name" required>
+                    <i class="input-icon uil uil-user" aria-hidden="true"></i>
                   </div>
                 </div>
-
-                <div class="card-back">
-                  <div class="center-wrap">
-                    <div class="section text-center">
-                      <h4 class="mb-4 pb-3">Sign Up</h4>
-                      <div class="form-group">
-                        <input type="text" name="logname" class="form-style" placeholder="Your Full Name" id="logname" autocomplete="off">
-                        <i class="input-icon uil uil-user"></i>
-                      </div>  
-                      <div class="form-group mt-2">
-                        <input type="email" name="logemail" class="form-style" placeholder="Your Email" id="logemail" autocomplete="off">
-                        <i class="input-icon uil uil-at"></i>
-                      </div>  
-                      <div class="form-group mt-2">
-                        <input type="password" name="logpass" class="form-style" placeholder="Your Password" id="logpass" autocomplete="off">
-                        <i class="input-icon uil uil-lock-alt"></i>
-                      </div>
-                      <a href="login.html" class="btn mt-4">submit</a>
-                    </div>
+                <div>
+                  <label class="auth-label" for="last-name">Nama belakang</label>
+                  <div class="form-group auth-input-group">
+                    <input class="form-style" type="text" id="last-name" name="lastName"
+                      placeholder="Nama belakang" autocomplete="family-name" required>
+                    <i class="input-icon uil uil-user" aria-hidden="true"></i>
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
+
+              <label class="auth-label" for="signup-nim">NIM</label>
+              <div class="form-group auth-input-group">
+                <input class="form-style" type="text" id="signup-nim" name="nim"
+                  placeholder="Masukkan NIM" inputmode="numeric" autocomplete="username"
+                  pattern="[0-9]{8}" minlength="8" maxlength="8"
+                  title="NIM harus terdiri dari 8 digit." required>
+                <i class="input-icon uil uil-user" aria-hidden="true"></i>
+              </div>
+
+              <label class="auth-label" for="signup-email">Email</label>
+              <div class="form-group auth-input-group">
+                <input class="form-style" type="email" id="signup-email" name="email"
+                  placeholder="you@example.com" autocomplete="email" required>
+                <i class="input-icon uil uil-envelope" aria-hidden="true"></i>
+              </div>
+
+              <label class="auth-label" for="signup-password">Password</label>
+              <div class="form-group auth-input-group">
+                <input class="form-style" type="password" id="signup-password" name="password"
+                  placeholder="Minimal 8 karakter" autocomplete="new-password" minlength="8" required>
+                <i class="input-icon uil uil-lock-alt" aria-hidden="true"></i>
+                <button class="password-toggle" type="button" data-password-toggle="signup-password"
+                  aria-label="Tampilkan password"><i class="uil uil-eye" aria-hidden="true"></i></button>
+              </div>
+
+              <button class="btn auth-submit" type="submit">Daftar Sekarang</button>
+              <p class="auth-notice" role="status" aria-live="polite" hidden></p>
+            </form>
+
+            <p class="auth-footer">Sudah punya akun?
+              <button class="auth-link auth-switch-text" type="button" data-auth-state="login">Masuk</button>
+            </p>
+          </section>
         </div>
       </div>
     </div>
-  </div>
-  
+  </main>
+  <script src="assets/js/auth-ui.js"></script>
 </body>
+
 </html>
