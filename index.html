@@ -471,37 +471,7 @@
         <div class="container text-center">
             <p class="section-subtitle">Struktur Kelas 2KA22</p>
             <h2 class="section-title mb-6">Struktur Pengurus Kelas</h2>
-            <div class="team-grid">
-                <article class="team-card">
-                    <div class="team-card-avatar">
-                        <img src="assets/jpg/dosen-pa.jpg" alt="Foto Dosen Pembimbing Akademik">
-                    </div>
-                    <h3 class="team-card-name">Maria Y Aryati Wahyuningrum</h3>
-                    <p class="team-card-role">Dosen Pembimbing Akademik (PA)</p>
-                    <p class="team-card-description">Mendampingi mahasiswa dalam proses akademik dan membantu merencanakan studi agar berjalan efektif dan terarah.</p>
-                    <a href="#contact" class="team-card-button">Kontak PA</a>
-                </article>
-
-                <article class="team-card team-card--featured">
-                    <div class="team-card-avatar">
-                        <img src="assets/jpg/ketua-kelas.jpg" alt="Foto Ketua Kelas">
-                    </div>
-                    <h3 class="team-card-name">Alisya</h3>
-                    <p class="team-card-role">Ketua Kelas</p>
-                    <p class="team-card-description">Mengkoordinasikan kegiatan kelas dan menjadi penghubung komunikasi antara dosen dan mahasiswa.</p>
-                    <a href="#contact" class="team-card-button">Lihat Profil</a>
-                </article>
-
-                <article class="team-card">
-                    <div class="team-card-avatar">
-                        <img src="assets/jpg/sekretaris.jpg" alt="Foto Sekretaris Kelas">
-                    </div>
-                    <h3 class="team-card-name">- &amp; -</h3>
-                    <p class="team-card-role">Sekretaris</p>
-                    <p class="team-card-description">Mengelola administrasi, membantu menyiapkan rapat, serta mencatat dan mendokumentasikan informasi serta kegiatan kelas.</p>
-                    <a href="#contact" class="team-card-button">Detail</a>
-                </article>
-            </div>
+            <div class="team-grid" id="team-gallery"></div>
         </div>
     </section><!-- end of class officers section -->
 
@@ -534,22 +504,23 @@
             <p class="section-subtitle">Kritik &amp; Saran</p>
             <h6 class="section-title mb-5">Kotak Aspirasi &amp; Masukan Kelas</h6>
             <!-- contact form -->
-            <form action="" class="contact-form col-md-10 col-lg-8 m-auto">
+            <form id="aspiration-form" class="contact-form col-md-10 col-lg-8 m-auto">
                 <div class="form-row">
                     <div class="form-group col-sm-6">
-                        <input type="text" size="50" class="form-control" placeholder="Nama Anda" required>
+                        <input type="text" id="aspiration-name" size="50" class="form-control" placeholder="Nama Anda" maxlength="100" required>
                     </div>
                     <div class="form-group col-sm-6">
-                        <input type="email" class="form-control" placeholder="Email Anda" requried>
+                        <input type="email" id="aspiration-email" class="form-control" placeholder="Email Anda" maxlength="150" required>
                     </div>
                     <div class="form-group col-sm-12">
-                        <textarea name="comment" id="comment" rows="6" class="form-control"
-                            placeholder="Tulis aspirasi, saran, atau masukan untuk kelas..."></textarea>
+                        <textarea name="comment" id="aspiration-message" rows="6" class="form-control"
+                            placeholder="Tulis aspirasi, saran, atau masukan untuk kelas..." maxlength="2000" required></textarea>
                     </div>
                     <div class="form-group col-sm-12 mt-3">
                         <input type="submit" value="Kirim Pesan" class="btn btn-outline-primary rounded">
                     </div>
                 </div>
+                <p id="aspiration-status" role="status" aria-live="polite"></p>
             </form><!-- end of contact form -->
         </div><!-- end of container -->
     </section><!-- end of contact section -->

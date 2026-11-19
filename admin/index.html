@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Panel Pengelola · 2KA22</title>
     <link rel="stylesheet" href="admin.css">
+    <link rel="stylesheet" href="admin-extras.css">
 </head>
 <body>
     <main class="admin-shell">
@@ -41,6 +42,25 @@
                         <div class="form-actions"><button>Upload foto</button></div>
                     </form>
                     <div id="activity-items" class="activity-list"></div>
+                </section>
+                <section class="card">
+                    <div class="card-heading"><div><p class="eyebrow">Struktur Kelas 2KA22</p><h2>Pengurus kelas</h2></div><span class="count" id="team-count">0 profil</span></div>
+                    <form id="team-form" class="form-grid">
+                        <input type="hidden" id="team-id">
+                        <label>Nama<input id="team-name" required maxlength="100" placeholder="Nama lengkap"></label>
+                        <label>Jabatan<input id="team-role" required maxlength="100" placeholder="Contoh: Ketua Kelas"></label>
+                        <label>Deskripsi<textarea id="team-description" rows="3" maxlength="500" placeholder="Tugas atau keterangan singkat"></textarea></label>
+                        <label>Teks tombol profil<input id="team-button" maxlength="40" placeholder="Contoh: Lihat Profil"></label>
+                        <label>Urutan tampil<input id="team-order" type="number" min="1" value="1" required></label>
+                        <label>Foto profil<input id="team-file" type="file" accept="image/jpeg,image/png,image/webp"></label>
+                        <label class="checkbox-label"><input id="team-featured" type="checkbox"> Tandai sebagai profil utama</label>
+                        <div class="form-actions"><button id="team-submit">Tambah profil</button><button type="button" class="secondary" id="team-cancel" hidden>Batal</button></div>
+                    </form>
+                    <div id="team-items" class="item-list"></div>
+                </section>
+                <section class="card">
+                    <div class="card-heading"><div><p class="eyebrow">Kotak Aspirasi</p><h2>Masukan kelas</h2></div><span class="count" id="aspiration-count">0 pesan</span></div>
+                    <div id="aspiration-items" class="item-list"></div>
                 </section>
             </div>
         </div>
