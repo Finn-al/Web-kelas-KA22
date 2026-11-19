@@ -34,6 +34,7 @@
             <a href="#home"><i class="ti-home" aria-hidden="true"></i><span>Dashboard</span></a>
             <a href="#data-mahasiswa"><i class="ti-user" aria-hidden="true"></i><span>Data Mahasiswa</span></a>
             <a href="#jadwal"><i class="ti-calendar" aria-hidden="true"></i><span>Jadwal Kuliah</span></a>
+            <a href="#jadwal-uts"><i class="ti-pencil-alt" aria-hidden="true"></i><span>Jadwal UTS</span></a>
             <a href="#dashboard-widgets"><i class="ti-book" aria-hidden="true"></i><span>Tugas &amp; Materi</span></a>
             <a href="#about"><i class="ti-info-alt" aria-hidden="true"></i><span>Informasi Kelas</span></a>
             <a href="#contact"><i class="ti-comment-alt" aria-hidden="true"></i><span>Kotak Aspirasi</span></a>
@@ -136,19 +137,19 @@
                     <span class="widget-icon"><i class="ti-alarm-clock" aria-hidden="true"></i></span>
                     <div>
                         <p class="widget-eyebrow">Jangan sampai terlewat</p>
-                        <h3 id="deadline-title">Deadline Terdekat</h3>
+                        <h3 id="deadline-title">UTS Terdekat</h3>
                     </div>
                 </div>
                 <ul class="deadline-list">
                     <li>
                         <span class="deadline-dot" aria-hidden="true"></span>
-                        <span class="deadline-task">UTS Basis Data</span>
-                        <span class="deadline-time">2 hari lagi</span>
+                        <a class="deadline-task" href="#jadwal-uts">Manajemen &amp; SIM 1</a>
+                        <span class="deadline-time">09 Des · 08.30</span>
                     </li>
                     <li>
                         <span class="deadline-dot" aria-hidden="true"></span>
-                        <span class="deadline-task">Pengumpulan Tugas Pemrograman</span>
-                        <span class="deadline-time">4 hari lagi</span>
+                        <a class="deadline-task" href="#jadwal-uts">Pengantar Organisasi &amp; Arsitektur Komputer</a>
+                        <span class="deadline-time">09 Des · 10.30</span>
                     </li>
                 </ul>
             </section>
@@ -455,6 +456,83 @@
             <p class="schedule-note">Jadwal perkuliahan kelas 2KA22.</p>
         </div>
     </section><!-- end of schedule section -->
+
+    <section class="section schedule-section uts-section" id="jadwal-uts">
+        <div class="container text-center">
+            <p class="section-subtitle">Informasi Akademik · Kelas 2KA22</p>
+            <h2 class="section-title mb-2">Jadwal UTS Ganjil (PTA) 2026/2027</h2>
+            <p class="schedule-subtitle">Jadwal Ujian Tengah Semester · Desember 2026</p>
+            <div class="schedule-table-wrapper">
+                <table class="schedule-table uts-table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Hari / Tanggal</th>
+                            <th scope="col">Waktu</th>
+                            <th scope="col">Mata Kuliah</th>
+                            <th scope="col">Ruang / Mode</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td data-label="Hari / Tanggal"><time datetime="2026-12-09">Rabu, 09 Desember 2026</time></td>
+                            <td data-label="Waktu">08.30 - 10.00</td>
+                            <td data-label="Mata Kuliah">Manajemen dan Sistem Informasi Manajemen 1</td>
+                            <td data-label="Ruang / Mode">J1-1110, J1-1111</td>
+                        </tr>
+                        <tr>
+                            <td data-label="Hari / Tanggal"><time datetime="2026-12-09">Rabu, 09 Desember 2026</time></td>
+                            <td data-label="Waktu">10.30 - 12.00</td>
+                            <td data-label="Mata Kuliah">Pengantar Organisasi dan Arsitektur Komputer</td>
+                            <td data-label="Ruang / Mode">J1-1110, J1-1111</td>
+                        </tr>
+                        <tr>
+                            <td data-label="Hari / Tanggal"><time datetime="2026-12-14">Senin, 14 Desember 2026</time></td>
+                            <td data-label="Waktu">13.00 - 14.30</td>
+                            <td data-label="Mata Kuliah">Matematika Sistem Informasi 1</td>
+                            <td data-label="Ruang / Mode">J1-1110, J1-1111</td>
+                        </tr>
+                        <tr>
+                            <td data-label="Hari / Tanggal"><time datetime="2026-12-14">Senin, 14 Desember 2026</time></td>
+                            <td data-label="Waktu">15.00 - 16.30</td>
+                            <td data-label="Mata Kuliah">Sistem Basis Data 1</td>
+                            <td data-label="Ruang / Mode">J1-1110, J1-1111</td>
+                        </tr>
+                        <tr>
+                            <td data-label="Hari / Tanggal"><time datetime="2026-12-16">Rabu, 16 Desember 2026</time></td>
+                            <td data-label="Waktu">08.30 - 10.00</td>
+                            <td data-label="Mata Kuliah">Teknik Pemrograman Terstruktur</td>
+                            <td data-label="Ruang / Mode">J1-1110, J1-1111</td>
+                        </tr>
+                        <tr>
+                            <td data-label="Hari / Tanggal"><time datetime="2026-12-16">Rabu, 16 Desember 2026</time></td>
+                            <td data-label="Waktu">10.30 - 12.00</td>
+                            <td data-label="Mata Kuliah">Bahasa Inggris</td>
+                            <td data-label="Ruang / Mode">J1-1110, J1-1111</td>
+                        </tr>
+                        <tr class="uts-row--special-room">
+                            <td data-label="Hari / Tanggal"><time datetime="2026-12-17">Kamis, 17 Desember 2026</time></td>
+                            <td data-label="Waktu">15.00 - 16.30</td>
+                            <td data-label="Mata Kuliah">Matematika Lanjut 1</td>
+                            <td data-label="Ruang / Mode">
+                                J1-1207, J1-1208
+                                <span class="uts-badge uts-badge--room">Ruang berbeda</span>
+                            </td>
+                        </tr>
+                        <tr class="uts-row--online">
+                            <td data-label="Hari / Tanggal"><time datetime="2026-12-19">Sabtu, 19 Desember 2026</time></td>
+                            <td data-label="Waktu">08.30 - 10.00</td>
+                            <td data-label="Mata Kuliah">Komputasi Big Data</td>
+                            <td data-label="Ruang / Mode">
+                                Online
+                                <span class="uts-badge uts-badge--online">DARING</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="schedule-note">Pastikan hadir sesuai waktu dan lokasi ujian yang tercantum.</p>
+        </div>
+    </section>
 
     <!-- portfolio section -->
     <section class="section" id="portfolio">

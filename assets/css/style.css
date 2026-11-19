@@ -13986,3 +13986,104 @@ html[data-theme="dark"] .header .header-content .header-subtitle {
     animation: none;
   }
 }
+
+.deadline-task {
+  text-decoration: none;
+}
+
+.deadline-task:hover,
+.deadline-task:focus-visible {
+  color: #695aa6;
+  text-decoration: underline;
+}
+
+.uts-table {
+  min-width: 760px;
+}
+
+.uts-table th:nth-child(1) {
+  width: 23%;
+}
+
+.uts-table th:nth-child(2) {
+  width: 17%;
+}
+
+.uts-table th:nth-child(3) {
+  width: 38%;
+}
+
+.uts-table th:nth-child(4) {
+  width: 22%;
+}
+
+.uts-badge {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 3px 8px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.uts-badge--online {
+  border-color: #b6e4ce;
+  color: #236b49;
+  background-color: #e8f7ef;
+}
+
+.uts-badge--room {
+  border-color: #ead29a;
+  color: #795a17;
+  background-color: #fff7df;
+}
+
+.uts-row--online {
+  background-color: #f0faf4;
+}
+
+.uts-row--special-room {
+  background-color: #fffaf0;
+}
+
+html[data-theme="dark"] .deadline-task:hover,
+html[data-theme="dark"] .deadline-task:focus-visible {
+  color: #d7c6ff;
+}
+
+html[data-theme="dark"] .uts-row--online {
+  background-color: #1e302a;
+}
+
+html[data-theme="dark"] .uts-row--special-room {
+  background-color: #332e22;
+}
+
+html[data-theme="dark"] .uts-badge--online {
+  border-color: #315a46;
+  color: #b6e4ce;
+  background-color: #263f33;
+}
+
+html[data-theme="dark"] .uts-badge--room {
+  border-color: #65532d;
+  color: #f1d89b;
+  background-color: #453a25;
+}
+
+@media (max-width: 767.98px) {
+  .uts-table {
+    min-width: 0;
+  }
+
+  .uts-badge {
+    margin: 4px 0 0;
+  }
+
+  .uts-table td:last-child {
+    align-items: start;
+  }
+}
