@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth, onAuthStateChanged, sendPasswordResetEmail, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { collection, addDoc, deleteDoc, doc, onSnapshot, orderBy, query, serverTimestamp, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { firebaseConfig } from "../assets/js/firebase-config.js";
 import { cloudinaryConfig } from "../assets/js/cloudinary-config.js";
@@ -48,22 +48,6 @@ if (!configured) {
             onSnapshot(query(collection(db, "deadlines"), orderBy("date", "asc")), renderDeadlines, () => message("Gagal membaca deadline.", true));
             onSnapshot(query(collection(db, "activities"), orderBy("createdAt", "desc")), renderActivities, () => message("Gagal membaca galeri.", true));
         }
-    });
-    $("login-form").addEventListener("submit", async (event) => {
-        event.preventDefault();
-        try {
-            await signInWithEmailAndPassword(auth, $("email").value.trim(), $("password").value);
-        } catch (error) {
-            if (error.code === "auth/invalid-credential" || error.code === "auth/wrong-password" || error.code === "auth/user-not-found") {
-                message(`Firebase project aktif: ${firebaseConfig.projectId}. Login ditolak: email/password tidak cocok, atau akun tidak memakai provider Email/Password. Periksa Authentication → Sign-in method dan gunakan link reset password.`, true);
-            } else {
-                message(`Gagal masuk (${error.code || "error"}): ${error.message}`, true);
-            }
-        }
-    });
-    $("reset-password").addEventListener("click", async () => {
-        if (!$("email").value) return message("Isi email terlebih dahulu untuk menerima link reset.", true);
-        try { await sendPasswordResetEmail(auth, $("email").value); message("Link reset password sudah dikirim. Periksa inbox dan folder spam."); } catch (error) { message(`Gagal mengirim link reset: ${error.message}`, true); }
     });
     $("logout").addEventListener("click", () => signOut(auth));
     $("deadline-form").addEventListener("submit", async (event) => {

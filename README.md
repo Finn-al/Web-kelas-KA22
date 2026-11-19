@@ -10,6 +10,8 @@ Website utama berada di root, sedangkan panel pengelola terpisah di [admin/](adm
 4. Buat akun Cloudinary gratis, buat **unsigned upload preset**, lalu isi `assets/js/cloudinary-config.js`.
 5. Jalankan melalui web server lokal (contoh: Live Server), bukan `file://`.
 
+Login dari `login.html` memakai email/password Firebase. Untuk membuka panel, masuk melalui `admin/` lalu gunakan tautan login; sesudah autentikasi berhasil, pengguna akan diarahkan kembali ke panel.
+
 Koleksi Firestore:
 
 - `deadlines`: `course`, `label`, `date` (`YYYY-MM-DD`), `time` (`HH:mm`), `createdAt`, `updatedAt`.

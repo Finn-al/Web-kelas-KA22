@@ -26,7 +26,7 @@
           <section class="auth-card auth-card--login" id="login" aria-labelledby="login-title">
             <p class="auth-brand">2KA22</p>
             <h1 id="login-title">Selamat Datang Kembali</h1>
-            <p class="auth-description">Masuk ke akun Anda</p>
+            <p class="auth-description" id="login-description">Masuk dengan akun Firebase Anda</p>
 
             <div class="auth-providers" aria-label="Pilihan masuk">
               <button class="auth-provider" type="button" data-provider="Google">
@@ -37,16 +37,14 @@
               </button>
             </div>
 
-            <div class="auth-divider"><span>atau masuk dengan NIM</span></div>
+            <div class="auth-divider"><span>atau masuk dengan email</span></div>
 
             <form id="login-form">
-              <label class="auth-label" for="login-nim">NIM</label>
+              <label class="auth-label" for="login-email">Email</label>
               <div class="form-group auth-input-group">
-                <input class="form-style" type="text" id="login-nim" name="nim"
-                  placeholder="Masukkan NIM" inputmode="numeric" autocomplete="username"
-                  pattern="[0-9]{8}" minlength="8" maxlength="8"
-                  title="NIM harus terdiri dari 8 digit." required>
-                <i class="input-icon uil uil-user" aria-hidden="true"></i>
+                <input class="form-style" type="email" id="login-email" name="email"
+                  placeholder="nama@email.com" autocomplete="username" required>
+                <i class="input-icon uil uil-envelope" aria-hidden="true"></i>
               </div>
 
               <label class="auth-label" for="login-password">Password</label>
@@ -146,6 +144,7 @@
     </div>
   </main>
   <script src="assets/js/auth-ui.js"></script>
+  <script type="module" src="assets/js/login-auth.js"></script>
 </body>
 
 </html>
