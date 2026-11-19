@@ -102,8 +102,6 @@ async function uploadImage(file) {
 
 async function initializeTeamDefaults() {
     const current = await getDocs(collection(db, "team"));
-    if (!current.empty) return;
-
     const profiles = [
         {
             id: "dosen-pa", name: "Maria Y Aryati Wahyuningrum", role: "Dosen Pembimbing Akademik (PA)",
@@ -121,8 +119,15 @@ async function initializeTeamDefaults() {
             buttonText: "Detail", order: 3, featured: false, imageUrl: ""
         }
     ];
+    const existingIds = new Set(current.docs.map((entry) => entry.id));
+    const existingRoles = new Set(current.docs.map((entry) => String(entry.data().role || "").trim().toLocaleLowerCase()));
+    const missingProfiles = profiles.filter((profile) =>
+        !existingIds.has(profile.id) && !existingRoles.has(profile.role.toLocaleLowerCase())
+    );
+    if (!missingProfiles.length) return;
+
     const batch = writeBatch(db);
-    profiles.forEach(({ id, ...profile }) => batch.set(doc(db, "team", id), {
+    missingProfiles.forEach(({ id, ...profile }) => batch.set(doc(db, "team", id), {
         ...profile, createdAt: serverTimestamp(), updatedAt: serverTimestamp()
     }));
     await batch.commit();
