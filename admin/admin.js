@@ -2,7 +2,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/fireba
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import {
     addDoc, collection, deleteDoc, doc, getDocs, onSnapshot, orderBy, query,
-    serverTimestamp, updateDoc, writeBatch
+    serverTimestamp, setDoc, updateDoc, writeBatch
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { firebaseConfig } from "../assets/js/firebase-config.js";
 import { cloudinaryConfig } from "../assets/js/cloudinary-config.js";
@@ -79,15 +79,12 @@ function renderActivities(snapshot) {
 function renderTeam(snapshot) {
     $("team-count").textContent = "3 profil tetap";
     const container = $("team-items"); container.innerHTML = ""; teamDataById.clear();
+    const records = new Map((snapshot?.docs || []).map((entry) => [entry.id, entry.data()]));
     teamProfiles.forEach((profile) => {
-        const entry = snapshot.docs.find((item) => item.id === profile.id);
-        if (!entry) {
-            container.insertAdjacentHTML("beforeend", `<article class="item"><div><strong>${escapeHtml(profile.role)}</strong><small>Profil sedang disiapkan.</small></div></article>`);
-            return;
-        }
-        const data = entry.data(); teamDataById.set(entry.id, data);
+        const data = { ...profile, ...(records.get(profile.id) || {}) };
+        teamDataById.set(profile.id, data);
         const imageUrl = safeImageUrl(data.imageUrl);
-        container.insertAdjacentHTML("beforeend", `<article class="item">${imageUrl ? `<img class="team-admin-avatar" src="${escapeHtml(imageUrl)}" alt="Foto ${escapeHtml(data.name)}">` : ""}<div><strong>${escapeHtml(data.name)}</strong><small>${escapeHtml(profile.role)}</small></div><div class="item-actions"><button data-team-edit="${escapeHtml(entry.id)}" class="secondary">Ubah</button></div></article>`);
+        container.insertAdjacentHTML("beforeend", `<article class="item">${imageUrl ? `<img class="team-admin-avatar" src="${escapeHtml(imageUrl)}" alt="Foto ${escapeHtml(data.name)}">` : ""}<div><strong>${escapeHtml(data.name)}</strong><small>${escapeHtml(profile.role)}</small></div><div class="item-actions"><button data-team-edit="${escapeHtml(profile.id)}" class="secondary">Ubah</button></div></article>`);
     });
 }
 
@@ -175,6 +172,7 @@ if (!configured) {
         if (!user) return;
 
         message(`Terhubung sebagai ${user.email}`);
+        renderTeam({ docs: [] });
         try {
             await initializeTeamDefaults();
         } catch (error) {
@@ -244,7 +242,15 @@ if (!configured) {
                 imagePublicId: uploaded?.publicId || previous?.imagePublicId || "",
                 updatedAt: serverTimestamp()
             };
-            await updateDoc(doc(db, "team", id), data);
+            const profile = teamProfiles.find((entry) => entry.id === id);
+            await setDoc(doc(db, "team", id), {
+                ...data,
+                role: previous?.role || profile.role,
+                buttonText: previous?.buttonText || profile.buttonText,
+                order: previous?.order || profile.order,
+                featured: previous?.featured ?? profile.featured,
+                createdAt: previous?.createdAt || serverTimestamp()
+            }, { merge: true });
             resetTeam(); message("Profil struktur kelas berhasil disimpan.");
         } catch (error) { message(`Gagal menyimpan profil: ${error.message}`, true); }
     });

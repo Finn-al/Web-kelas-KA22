@@ -19,7 +19,7 @@ Koleksi Firestore:
 - `team`: profil pengurus dengan `name`, `role`, `description`, `buttonText`, `order`, `featured`, `imageUrl`, `imagePublicId`.
 - `aspirations`: masukan publik dengan `name`, `email`, `message`, `createdAt`. Panel menampilkan dan dapat menghapus pesan.
 
-Struktur kelas selalu berisi tiga profil tetap: PA, ketua kelas, dan sekretaris. Panel hanya mengubah foto, nama, serta deskripsi; jabatan dan susunan kartu tidak dapat ditambah atau dihapus. Saat panel dibuka, profil awal yang belum ada akan ditambahkan tanpa menimpa nama, deskripsi, atau foto yang sudah tersimpan. Foto profil dan foto aktivitas diunggah ke Cloudinary; penghapusan foto dari panel menghapus metadata Firestore, sedangkan penghapusan file Cloudinary permanen memerlukan server-side API.
+Struktur kelas selalu berisi tiga profil tetap: PA, ketua kelas, dan sekretaris. Kartu dasar tetap terlihat jika Firestore belum tersedia; setelah listener tersambung, foto, nama, dan deskripsi dari Firestore menggantikannya. Panel hanya mengubah foto, nama, serta deskripsi; jabatan dan susunan kartu tidak dapat ditambah atau dihapus. Saat panel dibuka, profil awal yang belum ada akan ditambahkan tanpa menimpa nama, deskripsi, atau foto yang sudah tersimpan. Foto profil dan foto aktivitas diunggah ke Cloudinary; penghapusan foto dari panel menghapus metadata Firestore, sedangkan penghapusan file Cloudinary permanen memerlukan server-side API.
 
 Atur dan publish Firestore Rules berikut agar pengunjung dapat mengirim aspirasi, sementara hanya pengguna yang login dapat membacanya atau mengelola konten:
 
