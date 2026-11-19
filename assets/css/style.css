@@ -12837,68 +12837,75 @@ body {
 
 /* Class officers cards */
 .team-section {
-  background-color: #f7f6fb;
+  background-color: #f5f3fa;
 }
 
 .team-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   align-items: stretch;
-  gap: 26px;
-  padding-top: 40px;
+  gap: 24px;
+  padding: 48px 0 12px;
 }
 
 .team-card {
   position: relative;
   display: flex;
   min-width: 0;
+  min-height: 320px;
   flex-direction: column;
   align-items: center;
-  margin-top: 38px;
-  padding: 54px 24px 24px;
+  margin-top: 40px;
+  padding: 58px 24px 22px;
   border: 1px solid #e6e2ee;
   border-radius: 12px;
-  background-color: #fff;
-  box-shadow: 0 10px 28px rgba(57, 48, 96, 0.08);
+  background: linear-gradient(160deg, #fff 0%, #fcfbfe 100%);
+  box-shadow: 0 12px 30px rgba(57, 48, 96, 0.08);
   transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
 }
 
 .team-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 16px 34px rgba(57, 48, 96, 0.13);
+  border-color: #cec5e5;
+  box-shadow: 0 18px 36px rgba(57, 48, 96, 0.14);
 }
 
 .team-card--featured {
   transform: translateY(-8px);
   border-color: #9c8dce;
-  box-shadow: 0 0 0 3px rgba(105, 90, 166, 0.11), 0 16px 36px rgba(57, 48, 96, 0.13);
+  box-shadow: 0 0 0 3px rgba(105, 90, 166, 0.12), 0 18px 38px rgba(57, 48, 96, 0.14);
 }
 
 .team-card--featured:hover {
   transform: translateY(-12px);
-  box-shadow: 0 0 0 4px rgba(105, 90, 166, 0.14), 0 20px 38px rgba(57, 48, 96, 0.16);
+  box-shadow: 0 0 0 4px rgba(105, 90, 166, 0.16), 0 22px 40px rgba(57, 48, 96, 0.17);
 }
 
 .team-card-avatar {
   position: absolute;
-  top: -40px;
+  top: -44px;
   left: 50%;
   display: grid;
-  width: 82px;
-  height: 82px;
+  width: 88px;
+  height: 88px;
   place-items: center;
   overflow: hidden;
   transform: translateX(-50%);
-  border: 5px solid #fff;
+  border: 5px solid #f5f3fa;
   border-radius: 50%;
-  background-color: #efecf7;
-  box-shadow: 0 5px 16px rgba(57, 48, 96, 0.15);
+  background: linear-gradient(145deg, #f0edf8, #e4dff1);
+  box-shadow: 0 7px 20px rgba(57, 48, 96, 0.18);
 }
 
 .team-card-avatar img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.team-card:hover .team-card-avatar img {
+  transform: scale(1.06);
 }
 
 .team-card-avatar--initials {
@@ -12915,8 +12922,12 @@ body {
 }
 
 .team-card-role {
-  margin: 0 0 14px;
+  margin: 0 0 15px;
+  padding: 4px 11px;
+  border: 1px solid #e9e3f5;
+  border-radius: 999px;
   color: #695aa6;
+  background-color: #f6f3fb;
   font-size: 13px;
   font-weight: 700;
 }
@@ -12936,19 +12947,21 @@ body {
   border: 1px solid #493b82;
   border-radius: 8px;
   color: #fff;
-  background-color: #493b82;
+  background: linear-gradient(100deg, #51418f, #493b82);
   font-size: 13px;
   font-weight: 600;
   text-align: center;
-  transition: background-color 0.18s ease, box-shadow 0.18s ease;
+  transition: transform 0.18s ease, background-color 0.18s ease, box-shadow 0.18s ease;
 }
 
 .team-card-button:hover,
-.team-card-button:focus {
+.team-card-button:focus-visible {
   color: #fff;
-  background-color: #382d68;
+  background: linear-gradient(100deg, #423473, #382d68);
   box-shadow: 0 5px 14px rgba(73, 59, 130, 0.22);
+  transform: translateY(-1px);
   text-decoration: none;
+  outline: none;
 }
 
 @media (max-width: 991.98px) {
@@ -12967,16 +12980,20 @@ body {
   .team-grid {
     grid-template-columns: minmax(0, 1fr);
     gap: 16px;
+    max-width: 440px;
+    margin: 0 auto;
   }
 
   .team-card {
-    margin-top: 36px;
+    min-height: 300px;
+    margin-top: 38px;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .team-card,
-  .team-card-button {
+  .team-card-button,
+  .team-card-avatar img {
     transition: none;
   }
 }
@@ -13707,7 +13724,6 @@ html[data-theme="dark"] .dashboard-sidebar,
 html[data-theme="dark"] .dashboard-widget,
 html[data-theme="dark"] .student-stat,
 html[data-theme="dark"] .student-card,
-html[data-theme="dark"] .team-card,
 html[data-theme="dark"] .student-dialog,
 html[data-theme="dark"] .schedule-table-wrapper,
 html[data-theme="dark"] .service-card {
@@ -13759,6 +13775,17 @@ html[data-theme="dark"] .dashboard-main,
 html[data-theme="dark"] .student-section,
 html[data-theme="dark"] .team-section {
   background-color: #171522;
+}
+
+html[data-theme="dark"] .team-card {
+  border-color: #393548;
+  background: linear-gradient(160deg, #292637 0%, #211f2d 100%);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.24);
+}
+
+html[data-theme="dark"] .team-card:hover {
+  border-color: #5b4b88;
+  box-shadow: 0 18px 36px rgba(0, 0, 0, 0.34);
 }
 
 html[data-theme="dark"] .schedule-section {
@@ -13903,6 +13930,19 @@ html[data-theme="dark"] .team-card--featured {
 
 html[data-theme="dark"] .team-card-avatar {
   border-color: #211f2d;
+  background: linear-gradient(145deg, #37314d, #302b42);
+}
+
+html[data-theme="dark"] .team-section .section-subtitle,
+html[data-theme="dark"] .team-card-name,
+html[data-theme="dark"] .team-card-role,
+html[data-theme="dark"] .team-card-description,
+html[data-theme="dark"] .team-card-avatar--initials {
+  color: #fff;
+}
+
+html[data-theme="dark"] .team-card-role {
+  border-color: #4a4264;
   background-color: #302b42;
 }
 

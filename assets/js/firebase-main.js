@@ -8,6 +8,9 @@ const isConfigured = !firebaseConfig.apiKey.startsWith("YOUR_");
 const deadlineList = document.querySelector(".deadline-list");
 const portfolioRow = document.querySelector("#portfolio-gallery");
 const teamGallery = document.querySelector("#team-gallery");
+const fallbackTeamCards = new Map(teamGallery
+    ? Array.from(teamGallery.querySelectorAll(".team-card[data-profile-id]"), (card) => [card.dataset.profileId, card.outerHTML])
+    : []);
 const aspirationForm = document.querySelector("#aspiration-form");
 
 function escapeHtml(value = "") {
@@ -73,7 +76,11 @@ if (isConfigured) {
         const fixedProfileIds = ["dosen-pa", "ketua-kelas", "sekretaris"];
         fixedProfileIds.forEach((profileId) => {
             const entry = snapshot.docs.find((item) => item.id === profileId);
-            if (!entry) return;
+            if (!entry) {
+                const fallbackCard = fallbackTeamCards.get(profileId);
+                if (fallbackCard) teamGallery.insertAdjacentHTML("beforeend", fallbackCard);
+                return;
+            }
             const data = entry.data();
             const imageUrl = safeImageUrl(data.imageUrl);
             const avatar = imageUrl
@@ -82,9 +89,11 @@ if (isConfigured) {
             teamGallery.insertAdjacentHTML("beforeend",
                 `<article class="team-card${data.featured ? " team-card--featured" : ""}"><div class="team-card-avatar">${avatar}</div><h3 class="team-card-name">${escapeHtml(data.name || "")}</h3><p class="team-card-role">${escapeHtml(data.role || "")}</p><p class="team-card-description">${escapeHtml(data.description || "")}</p><a href="#contact" class="team-card-button">${escapeHtml(data.buttonText || "Lihat profil")}</a></article>`);
         });
-        if (!teamGallery.children.length) teamGallery.innerHTML = '<p class="firebase-message">Belum ada data struktur kelas.</p>';
+        if (!teamGallery.children.length) showMessage(teamGallery, "Belum ada data struktur kelas.");
     }, () => {
-        teamGallery.innerHTML = '<p class="firebase-message">Struktur kelas belum dapat dimuat.</p>';
+        if (!teamGallery.children.length) {
+            showMessage(teamGallery, "Struktur kelas belum dapat dimuat.");
+        }
     });
 
     aspirationForm.addEventListener("submit", async (event) => {
@@ -111,5 +120,7 @@ if (isConfigured) {
 } else {
     showMessage(deadlineList, "Hubungkan Firebase untuk menampilkan deadline terbaru.");
     if (portfolioRow) portfolioRow.innerHTML = '<p class="firebase-message">Hubungkan Firebase untuk menampilkan galeri aktivitas.</p>';
-    if (teamGallery) teamGallery.innerHTML = '<p class="firebase-message">Hubungkan Firebase untuk menampilkan struktur kelas.</p>';
+    if (teamGallery && !teamGallery.children.length) {
+        showMessage(teamGallery, "Hubungkan Firebase untuk menampilkan struktur kelas.");
+    }
 }
