@@ -70,7 +70,10 @@ if (isConfigured) {
 
     onSnapshot(query(collection(db, "team"), orderBy("order", "asc")), (snapshot) => {
         teamGallery.innerHTML = "";
-        snapshot.forEach((entry) => {
+        const fixedProfileIds = ["dosen-pa", "ketua-kelas", "sekretaris"];
+        fixedProfileIds.forEach((profileId) => {
+            const entry = snapshot.docs.find((item) => item.id === profileId);
+            if (!entry) return;
             const data = entry.data();
             const imageUrl = safeImageUrl(data.imageUrl);
             const avatar = imageUrl
@@ -79,7 +82,7 @@ if (isConfigured) {
             teamGallery.insertAdjacentHTML("beforeend",
                 `<article class="team-card${data.featured ? " team-card--featured" : ""}"><div class="team-card-avatar">${avatar}</div><h3 class="team-card-name">${escapeHtml(data.name || "")}</h3><p class="team-card-role">${escapeHtml(data.role || "")}</p><p class="team-card-description">${escapeHtml(data.description || "")}</p><a href="#contact" class="team-card-button">${escapeHtml(data.buttonText || "Lihat profil")}</a></article>`);
         });
-        if (!snapshot.size) teamGallery.innerHTML = '<p class="firebase-message">Belum ada data struktur kelas.</p>';
+        if (!teamGallery.children.length) teamGallery.innerHTML = '<p class="firebase-message">Belum ada data struktur kelas.</p>';
     }, () => {
         teamGallery.innerHTML = '<p class="firebase-message">Struktur kelas belum dapat dimuat.</p>';
     });

@@ -11,6 +11,23 @@ const $ = (id) => document.getElementById(id);
 const configured = !firebaseConfig.apiKey.startsWith("YOUR_");
 const status = $("status");
 const teamDataById = new Map();
+const teamProfiles = [
+    {
+        id: "dosen-pa", name: "Maria Y Aryati Wahyuningrum", role: "Dosen Pembimbing Akademik (PA)",
+        description: "Mendampingi mahasiswa dalam proses akademik dan membantu merencanakan studi agar berjalan efektif dan terarah.",
+        buttonText: "Kontak PA", order: 1, featured: false
+    },
+    {
+        id: "ketua-kelas", name: "Alisya", role: "Ketua Kelas",
+        description: "Mengkoordinasikan kegiatan kelas dan menjadi penghubung komunikasi antara dosen dan mahasiswa.",
+        buttonText: "Lihat Profil", order: 2, featured: true
+    },
+    {
+        id: "sekretaris", name: "- & -", role: "Sekretaris",
+        description: "Mengelola administrasi, membantu menyiapkan rapat, serta mencatat dan mendokumentasikan informasi serta kegiatan kelas.",
+        buttonText: "Detail", order: 3, featured: false
+    }
+];
 let db;
 let activeSubscriptions = [];
 
@@ -31,8 +48,7 @@ function resetDeadline() {
     $("deadline-form").reset(); $("deadline-id").value = ""; $("deadline-submit").textContent = "Tambah deadline"; $("deadline-cancel").hidden = true;
 }
 function resetTeam() {
-    $("team-form").reset(); $("team-id").value = ""; $("team-order").value = "1";
-    $("team-submit").textContent = "Tambah profil"; $("team-cancel").hidden = true;
+    $("team-form").reset(); $("team-id").value = ""; $("team-form").hidden = true;
 }
 function formatCreatedAt(timestamp) {
     if (!timestamp || typeof timestamp.toDate !== "function") return "Waktu tidak tersedia";
@@ -61,13 +77,17 @@ function renderActivities(snapshot) {
 }
 
 function renderTeam(snapshot) {
-    $("team-count").textContent = `${snapshot.size} profil`;
+    $("team-count").textContent = "3 profil tetap";
     const container = $("team-items"); container.innerHTML = ""; teamDataById.clear();
-    if (!snapshot.size) return empty(container, "Belum ada profil struktur kelas.");
-    snapshot.forEach((entry) => {
+    teamProfiles.forEach((profile) => {
+        const entry = snapshot.docs.find((item) => item.id === profile.id);
+        if (!entry) {
+            container.insertAdjacentHTML("beforeend", `<article class="item"><div><strong>${escapeHtml(profile.role)}</strong><small>Profil sedang disiapkan.</small></div></article>`);
+            return;
+        }
         const data = entry.data(); teamDataById.set(entry.id, data);
         const imageUrl = safeImageUrl(data.imageUrl);
-        container.insertAdjacentHTML("beforeend", `<article class="item">${imageUrl ? `<img class="team-admin-avatar" src="${escapeHtml(imageUrl)}" alt="Foto ${escapeHtml(data.name)}">` : ""}<div><strong>${escapeHtml(data.name)}</strong><small>${escapeHtml(data.role)} · Urutan ${Number(data.order) || 1}</small></div><div class="item-actions"><button data-team-edit="${escapeHtml(entry.id)}" class="secondary">Edit</button><button data-team-delete="${escapeHtml(entry.id)}" class="danger">Hapus</button></div></article>`);
+        container.insertAdjacentHTML("beforeend", `<article class="item">${imageUrl ? `<img class="team-admin-avatar" src="${escapeHtml(imageUrl)}" alt="Foto ${escapeHtml(data.name)}">` : ""}<div><strong>${escapeHtml(data.name)}</strong><small>${escapeHtml(profile.role)}</small></div><div class="item-actions"><button data-team-edit="${escapeHtml(entry.id)}" class="secondary">Ubah</button></div></article>`);
     });
 }
 
@@ -102,35 +122,41 @@ async function uploadImage(file) {
 
 async function initializeTeamDefaults() {
     const current = await getDocs(collection(db, "team"));
-    const profiles = [
-        {
-            id: "dosen-pa", name: "Maria Y Aryati Wahyuningrum", role: "Dosen Pembimbing Akademik (PA)",
-            description: "Mendampingi mahasiswa dalam proses akademik dan membantu merencanakan studi agar berjalan efektif dan terarah.",
-            buttonText: "Kontak PA", order: 1, featured: false, imageUrl: ""
-        },
-        {
-            id: "ketua-kelas", name: "Alisya", role: "Ketua Kelas",
-            description: "Mengkoordinasikan kegiatan kelas dan menjadi penghubung komunikasi antara dosen dan mahasiswa.",
-            buttonText: "Lihat Profil", order: 2, featured: true, imageUrl: ""
-        },
-        {
-            id: "sekretaris", name: "- & -", role: "Sekretaris",
-            description: "Mengelola administrasi, membantu menyiapkan rapat, serta mencatat dan mendokumentasikan informasi serta kegiatan kelas.",
-            buttonText: "Detail", order: 3, featured: false, imageUrl: ""
-        }
-    ];
-    const existingIds = new Set(current.docs.map((entry) => entry.id));
-    const existingRoles = new Set(current.docs.map((entry) => String(entry.data().role || "").trim().toLocaleLowerCase()));
-    const missingProfiles = profiles.filter((profile) =>
-        !existingIds.has(profile.id) && !existingRoles.has(profile.role.toLocaleLowerCase())
-    );
-    if (!missingProfiles.length) return;
-
+    const existingById = new Map(current.docs.map((entry) => [entry.id, entry]));
     const batch = writeBatch(db);
-    missingProfiles.forEach(({ id, ...profile }) => batch.set(doc(db, "team", id), {
-        ...profile, createdAt: serverTimestamp(), updatedAt: serverTimestamp()
-    }));
-    await batch.commit();
+    let hasChanges = false;
+    teamProfiles.forEach((profile) => {
+        const existing = existingById.get(profile.id);
+        if (existing) {
+            const data = existing.data();
+            if (data.role !== profile.role || data.buttonText !== profile.buttonText
+                || data.order !== profile.order || data.featured !== profile.featured) {
+                batch.update(doc(db, "team", profile.id), {
+                    role: profile.role, buttonText: profile.buttonText,
+                    order: profile.order, featured: profile.featured,
+                    updatedAt: serverTimestamp()
+                });
+                hasChanges = true;
+            }
+            return;
+        }
+
+        const matchingRole = current.docs.find((entry) =>
+            String(entry.data().role || "").trim().toLocaleLowerCase() === profile.role.toLocaleLowerCase()
+        );
+        const existingData = matchingRole ? matchingRole.data() : {};
+        batch.set(doc(db, "team", profile.id), {
+            ...profile,
+            name: existingData.name || profile.name,
+            description: existingData.description || profile.description,
+            imageUrl: existingData.imageUrl || "",
+            imagePublicId: existingData.imagePublicId || "",
+            createdAt: existingData.createdAt || serverTimestamp(),
+            updatedAt: serverTimestamp()
+        });
+        hasChanges = true;
+    });
+    if (hasChanges) await batch.commit();
 }
 
 if (!configured) {
@@ -206,40 +232,32 @@ if (!configured) {
     $("team-form").addEventListener("submit", async (event) => {
         event.preventDefault();
         const id = $("team-id").value;
+        if (!teamProfiles.some((profile) => profile.id === id)) return message("Pilih salah satu dari tiga profil pengurus.", true);
         try {
             const previous = id ? teamDataById.get(id) : null;
             const file = $("team-file").files[0];
             const uploaded = file ? await uploadImage(file) : null;
             const data = {
                 name: $("team-name").value.trim(),
-                role: $("team-role").value.trim(),
                 description: $("team-description").value.trim(),
-                buttonText: $("team-button").value.trim(),
-                order: Number($("team-order").value),
-                featured: $("team-featured").checked,
                 imageUrl: uploaded?.imageUrl || previous?.imageUrl || "",
                 imagePublicId: uploaded?.publicId || previous?.imagePublicId || "",
                 updatedAt: serverTimestamp()
             };
-            if (id) await updateDoc(doc(db, "team", id), data);
-            else await addDoc(collection(db, "team"), { ...data, createdAt: serverTimestamp() });
+            await updateDoc(doc(db, "team", id), data);
             resetTeam(); message("Profil struktur kelas berhasil disimpan.");
         } catch (error) { message(`Gagal menyimpan profil: ${error.message}`, true); }
     });
     $("team-cancel").addEventListener("click", resetTeam);
     $("team-items").addEventListener("click", async (event) => {
-        const editId = event.target.dataset.teamEdit; const deleteId = event.target.dataset.teamDelete;
+        const editId = event.target.dataset.teamEdit;
         if (editId) {
             const data = teamDataById.get(editId);
             if (!data) return;
-            $("team-id").value = editId; $("team-name").value = data.name || ""; $("team-role").value = data.role || "";
-            $("team-description").value = data.description || ""; $("team-button").value = data.buttonText || "";
-            $("team-order").value = Number(data.order) || 1; $("team-featured").checked = Boolean(data.featured);
-            $("team-submit").textContent = "Simpan perubahan"; $("team-cancel").hidden = false;
-        }
-        if (deleteId && confirm("Hapus profil struktur kelas ini?")) {
-            try { await deleteDoc(doc(db, "team", deleteId)); message("Profil struktur kelas berhasil dihapus."); }
-            catch (error) { message(`Gagal menghapus profil: ${error.message}`, true); }
+            $("team-id").value = editId; $("team-name").value = data.name || "";
+            $("team-description").value = data.description || "";
+            $("team-editor-role").textContent = teamProfiles.find((profile) => profile.id === editId).role;
+            $("team-form").hidden = false;
         }
     });
 
