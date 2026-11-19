@@ -9,6 +9,23 @@ const deadlineList = document.querySelector(".deadline-list");
 const portfolioRow = document.querySelector("#portfolio-gallery");
 const teamGallery = document.querySelector("#team-gallery");
 const aspirationForm = document.querySelector("#aspiration-form");
+const teamProfiles = [
+    {
+        id: "dosen-pa", name: "Maria Y Aryati Wahyuningrum", role: "Dosen Pembimbing Akademik (PA)",
+        description: "Mendampingi mahasiswa dalam proses akademik dan membantu merencanakan studi agar berjalan efektif dan terarah.",
+        buttonText: "Kontak PA", featured: false
+    },
+    {
+        id: "ketua-kelas", name: "Alisya", role: "Ketua Kelas",
+        description: "Mengkoordinasikan kegiatan kelas dan menjadi penghubung komunikasi antara dosen dan mahasiswa.",
+        buttonText: "Lihat Profil", featured: true
+    },
+    {
+        id: "sekretaris", name: "- & -", role: "Sekretaris",
+        description: "Mengelola administrasi, membantu menyiapkan rapat, serta mencatat dan mendokumentasikan informasi serta kegiatan kelas.",
+        buttonText: "Detail", featured: false
+    }
+];
 
 function escapeHtml(value = "") {
     return String(value).replace(/[&<>"']/g, (character) => ({
@@ -37,6 +54,20 @@ function formatDeadline(date, time) {
 
 function showMessage(container, text) {
     if (container) container.innerHTML = `<li class="firebase-message">${escapeHtml(text)}</li>`;
+}
+
+function renderTeam(snapshot) {
+    const records = new Map(snapshot.docs.map((entry) => [entry.id, entry.data()]));
+    teamGallery.innerHTML = "";
+    teamProfiles.forEach((profile) => {
+        const data = { ...profile, ...(records.get(profile.id) || {}) };
+        const imageUrl = safeImageUrl(data.imageUrl);
+        const avatar = imageUrl
+            ? `<img src="${escapeHtml(imageUrl)}" alt="Foto ${escapeHtml(data.name)}">`
+            : `<span class="team-card-avatar--initials">${escapeHtml(initials(data.name))}</span>`;
+        teamGallery.insertAdjacentHTML("beforeend",
+            `<article class="team-card${profile.featured ? " team-card--featured" : ""}"><div class="team-card-avatar">${avatar}</div><h3 class="team-card-name">${escapeHtml(data.name)}</h3><p class="team-card-role">${escapeHtml(profile.role)}</p><p class="team-card-description">${escapeHtml(data.description)}</p><a href="#contact" class="team-card-button">${escapeHtml(profile.buttonText)}</a></article>`);
+    });
 }
 
 if (isConfigured) {
@@ -68,23 +99,8 @@ if (isConfigured) {
         portfolioRow.innerHTML = '<p class="firebase-message">Galeri belum dapat dimuat.</p>';
     });
 
-    onSnapshot(query(collection(db, "team"), orderBy("order", "asc")), (snapshot) => {
-        teamGallery.innerHTML = "";
-        const fixedProfileIds = ["dosen-pa", "ketua-kelas", "sekretaris"];
-        fixedProfileIds.forEach((profileId) => {
-            const entry = snapshot.docs.find((item) => item.id === profileId);
-            if (!entry) return;
-            const data = entry.data();
-            const imageUrl = safeImageUrl(data.imageUrl);
-            const avatar = imageUrl
-                ? `<img src="${escapeHtml(imageUrl)}" alt="Foto ${escapeHtml(data.name)}">`
-                : `<span class="team-card-avatar--initials">${escapeHtml(initials(data.name))}</span>`;
-            teamGallery.insertAdjacentHTML("beforeend",
-                `<article class="team-card${data.featured ? " team-card--featured" : ""}"><div class="team-card-avatar">${avatar}</div><h3 class="team-card-name">${escapeHtml(data.name || "")}</h3><p class="team-card-role">${escapeHtml(data.role || "")}</p><p class="team-card-description">${escapeHtml(data.description || "")}</p><a href="#contact" class="team-card-button">${escapeHtml(data.buttonText || "Lihat profil")}</a></article>`);
-        });
-        if (!teamGallery.children.length) teamGallery.innerHTML = '<p class="firebase-message">Belum ada data struktur kelas.</p>';
-    }, () => {
-        teamGallery.innerHTML = '<p class="firebase-message">Struktur kelas belum dapat dimuat.</p>';
+    onSnapshot(query(collection(db, "team"), orderBy("order", "asc")), renderTeam, (error) => {
+        console.error("Gagal memuat struktur kelas dari Firestore:", error);
     });
 
     aspirationForm.addEventListener("submit", async (event) => {
