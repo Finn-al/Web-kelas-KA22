@@ -1,18 +1,42 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { collection, addDoc, deleteDoc, doc, onSnapshot, orderBy, query, serverTimestamp, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import {
+    addDoc, collection, deleteDoc, doc, getDocs, onSnapshot, orderBy, query,
+    serverTimestamp, updateDoc, writeBatch
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { firebaseConfig } from "../assets/js/firebase-config.js";
 import { cloudinaryConfig } from "../assets/js/cloudinary-config.js";
 
 const $ = (id) => document.getElementById(id);
 const configured = !firebaseConfig.apiKey.startsWith("YOUR_");
 const status = $("status");
+const teamDataById = new Map();
 let db;
+let activeSubscriptions = [];
 
 function message(text, error = false) { status.textContent = text; status.className = `notice${error ? " error" : ""}`; }
-function empty(container, text) { container.innerHTML = `<p class="empty">${text}</p>`; }
+function empty(container, text) { container.innerHTML = `<p class="empty">${escapeHtml(text)}</p>`; }
+function escapeHtml(value = "") {
+    return String(value).replace(/[&<>"']/g, (character) => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+    })[character]);
+}
+function safeImageUrl(value) {
+    const url = String(value || "");
+    if (/^https:\/\/res\.cloudinary\.com\/[a-z0-9_-]+\/image\/upload\//i.test(url)) return url;
+    if (/^\/assets\/[a-z0-9._/-]+$/i.test(url)) return url;
+    return "";
+}
 function resetDeadline() {
     $("deadline-form").reset(); $("deadline-id").value = ""; $("deadline-submit").textContent = "Tambah deadline"; $("deadline-cancel").hidden = true;
+}
+function resetTeam() {
+    $("team-form").reset(); $("team-id").value = ""; $("team-order").value = "1";
+    $("team-submit").textContent = "Tambah profil"; $("team-cancel").hidden = true;
+}
+function formatCreatedAt(timestamp) {
+    if (!timestamp || typeof timestamp.toDate !== "function") return "Waktu tidak tersedia";
+    return new Intl.DateTimeFormat("id-ID", { dateStyle: "medium", timeStyle: "short" }).format(timestamp.toDate());
 }
 
 function renderDeadlines(snapshot) {
@@ -21,7 +45,7 @@ function renderDeadlines(snapshot) {
     if (!snapshot.size) return empty(container, "Belum ada data deadline.");
     snapshot.forEach((entry) => {
         const data = entry.data();
-        container.insertAdjacentHTML("beforeend", `<article class="item"><div><strong>${data.course}${data.label ? ` · ${data.label}` : ""}</strong><small>${data.date} · ${data.time}</small></div><div class="item-actions"><button data-edit="${entry.id}" class="secondary">Edit</button><button data-delete="${entry.id}" class="danger">Hapus</button></div></article>`);
+        container.insertAdjacentHTML("beforeend", `<article class="item"><div><strong>${escapeHtml(data.course)}${data.label ? ` · ${escapeHtml(data.label)}` : ""}</strong><small>${escapeHtml(data.date)} · ${escapeHtml(data.time)}</small></div><div class="item-actions"><button data-edit="${escapeHtml(entry.id)}" class="secondary">Edit</button><button data-delete="${escapeHtml(entry.id)}" class="danger">Hapus</button></div></article>`);
     });
 }
 
@@ -31,24 +55,108 @@ function renderActivities(snapshot) {
     if (!snapshot.size) return empty(container, "Belum ada foto aktivitas.");
     snapshot.forEach((entry) => {
         const data = entry.data();
-        container.insertAdjacentHTML("beforeend", `<article class="activity-item"><img src="${data.imageUrl}" alt="${data.title}"><div><strong>${data.title}</strong><button data-activity-delete="${entry.id}" data-storage-path="${data.storagePath}" class="danger">Hapus foto</button></div></article>`);
+        const imageUrl = safeImageUrl(data.imageUrl);
+        container.insertAdjacentHTML("beforeend", `<article class="activity-item">${imageUrl ? `<img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(data.title)}">` : ""}<div><strong>${escapeHtml(data.title)}</strong><button data-activity-delete="${escapeHtml(entry.id)}" class="danger">Hapus dari galeri</button></div></article>`);
     });
+}
+
+function renderTeam(snapshot) {
+    $("team-count").textContent = `${snapshot.size} profil`;
+    const container = $("team-items"); container.innerHTML = ""; teamDataById.clear();
+    if (!snapshot.size) return empty(container, "Belum ada profil struktur kelas.");
+    snapshot.forEach((entry) => {
+        const data = entry.data(); teamDataById.set(entry.id, data);
+        const imageUrl = safeImageUrl(data.imageUrl);
+        container.insertAdjacentHTML("beforeend", `<article class="item">${imageUrl ? `<img class="team-admin-avatar" src="${escapeHtml(imageUrl)}" alt="Foto ${escapeHtml(data.name)}">` : ""}<div><strong>${escapeHtml(data.name)}</strong><small>${escapeHtml(data.role)} · Urutan ${Number(data.order) || 1}</small></div><div class="item-actions"><button data-team-edit="${escapeHtml(entry.id)}" class="secondary">Edit</button><button data-team-delete="${escapeHtml(entry.id)}" class="danger">Hapus</button></div></article>`);
+    });
+}
+
+function renderAspirations(snapshot) {
+    $("aspiration-count").textContent = `${snapshot.size} pesan`;
+    const container = $("aspiration-items"); container.innerHTML = "";
+    if (!snapshot.size) return empty(container, "Belum ada aspirasi yang masuk.");
+    snapshot.forEach((entry) => {
+        const data = entry.data();
+        container.insertAdjacentHTML("beforeend", `<article class="item item--aspiration"><div><strong>${escapeHtml(data.name)}</strong><small>${escapeHtml(data.email)} · ${escapeHtml(formatCreatedAt(data.createdAt))}</small><p>${escapeHtml(data.message)}</p></div><div class="item-actions"><button data-aspiration-delete="${escapeHtml(entry.id)}" class="danger">Hapus</button></div></article>`);
+    });
+}
+
+async function uploadImage(file) {
+    if (!file || !["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
+        throw new Error("Pilih gambar JPG, PNG, atau WEBP.");
+    }
+    if (file.size > 5 * 1024 * 1024) throw new Error("Ukuran gambar maksimal 5 MB.");
+    if (cloudinaryConfig.cloudName.startsWith("YOUR_") || cloudinaryConfig.uploadPreset.startsWith("YOUR_")) {
+        throw new Error("Isi konfigurasi Cloudinary terlebih dahulu.");
+    }
+
+    const body = new FormData();
+    body.append("file", file);
+    body.append("upload_preset", cloudinaryConfig.uploadPreset);
+    body.append("folder", "kelas-2ka22");
+    const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudinaryConfig.cloudName}/image/upload`, { method: "POST", body });
+    const result = await response.json();
+    if (!response.ok) throw new Error(result.error?.message || "Upload Cloudinary gagal.");
+    return { imageUrl: result.secure_url, publicId: result.public_id };
+}
+
+async function initializeTeamDefaults() {
+    const current = await getDocs(collection(db, "team"));
+    if (!current.empty) return;
+
+    const profiles = [
+        {
+            id: "dosen-pa", name: "Maria Y Aryati Wahyuningrum", role: "Dosen Pembimbing Akademik (PA)",
+            description: "Mendampingi mahasiswa dalam proses akademik dan membantu merencanakan studi agar berjalan efektif dan terarah.",
+            buttonText: "Kontak PA", order: 1, featured: false, imageUrl: ""
+        },
+        {
+            id: "ketua-kelas", name: "Alisya", role: "Ketua Kelas",
+            description: "Mengkoordinasikan kegiatan kelas dan menjadi penghubung komunikasi antara dosen dan mahasiswa.",
+            buttonText: "Lihat Profil", order: 2, featured: true, imageUrl: ""
+        },
+        {
+            id: "sekretaris", name: "- & -", role: "Sekretaris",
+            description: "Mengelola administrasi, membantu menyiapkan rapat, serta mencatat dan mendokumentasikan informasi serta kegiatan kelas.",
+            buttonText: "Detail", order: 3, featured: false, imageUrl: ""
+        }
+    ];
+    const batch = writeBatch(db);
+    profiles.forEach(({ id, ...profile }) => batch.set(doc(db, "team", id), {
+        ...profile, createdAt: serverTimestamp(), updatedAt: serverTimestamp()
+    }));
+    await batch.commit();
 }
 
 if (!configured) {
     message("Isi konfigurasi Firebase di assets/js/firebase-config.js sebelum digunakan.", true);
 } else {
-    const app = initializeApp(firebaseConfig); db = (await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js")).getFirestore(app);
+    const app = initializeApp(firebaseConfig);
+    const { getFirestore } = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js");
+    db = getFirestore(app);
     const auth = getAuth(app);
+
     message(`Konfigurasi panel mengarah ke Firebase project: ${firebaseConfig.projectId}`);
-    onAuthStateChanged(auth, (user) => {
+    onAuthStateChanged(auth, async (user) => {
+        activeSubscriptions.forEach((unsubscribe) => unsubscribe());
+        activeSubscriptions = [];
         $("auth-card").hidden = Boolean(user); $("panel").hidden = !user;
-        if (user) {
-            message(`Terhubung sebagai ${user.email}`);
-            onSnapshot(query(collection(db, "deadlines"), orderBy("date", "asc")), renderDeadlines, () => message("Gagal membaca deadline.", true));
-            onSnapshot(query(collection(db, "activities"), orderBy("createdAt", "desc")), renderActivities, () => message("Gagal membaca galeri.", true));
+        if (!user) return;
+
+        message(`Terhubung sebagai ${user.email}`);
+        try {
+            await initializeTeamDefaults();
+        } catch (error) {
+            message(`Gagal menyiapkan data struktur kelas: ${error.message}`, true);
         }
+        activeSubscriptions = [
+            onSnapshot(query(collection(db, "deadlines"), orderBy("date", "asc")), renderDeadlines, () => message("Gagal membaca deadline. Periksa Firestore Rules.", true)),
+            onSnapshot(query(collection(db, "activities"), orderBy("createdAt", "desc")), renderActivities, () => message("Gagal membaca galeri. Periksa Firestore Rules.", true)),
+            onSnapshot(query(collection(db, "team"), orderBy("order", "asc")), renderTeam, () => message("Gagal membaca struktur kelas. Periksa Firestore Rules.", true)),
+            onSnapshot(query(collection(db, "aspirations"), orderBy("createdAt", "desc")), renderAspirations, () => message("Gagal membaca aspirasi. Periksa Firestore Rules.", true))
+        ];
     });
+
     $("logout").addEventListener("click", () => signOut(auth));
     $("deadline-form").addEventListener("submit", async (event) => {
         event.preventDefault();
@@ -62,27 +170,77 @@ if (!configured) {
     $("deadline-cancel").addEventListener("click", resetDeadline);
     $("deadline-items").addEventListener("click", async (event) => {
         const editId = event.target.dataset.edit; const deleteId = event.target.dataset.delete;
-        if (editId) {
-            const snapshot = await (await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js")).getDoc(doc(db, "deadlines", editId)); const data = snapshot.data();
-            $("deadline-id").value = editId; $("course").value = data.course; $("label").value = data.label || ""; $("date").value = data.date; $("time").value = data.time; $("deadline-submit").textContent = "Simpan perubahan"; $("deadline-cancel").hidden = false;
-        }
-        if (deleteId && confirm("Hapus deadline ini?")) await deleteDoc(doc(db, "deadlines", deleteId));
-    });
-    $("activity-form").addEventListener("submit", async (event) => {
-        event.preventDefault(); const file = $("activity-file").files[0];
-        if (!file || file.size > 5 * 1024 * 1024) return message("Pilih gambar maksimal 5 MB.", true);
         try {
-            if (cloudinaryConfig.cloudName.startsWith("YOUR_") || cloudinaryConfig.uploadPreset.startsWith("YOUR_")) return message("Isi konfigurasi Cloudinary terlebih dahulu.", true);
-            const body = new FormData(); body.append("file", file); body.append("upload_preset", cloudinaryConfig.uploadPreset); body.append("folder", "kelas-2ka22/activities");
-            const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudinaryConfig.cloudName}/image/upload`, { method: "POST", body });
-            if (!response.ok) throw new Error("Upload Cloudinary gagal.");
-            const uploaded = await response.json();
-            await addDoc(collection(db, "activities"), { title: $("activity-title").value.trim(), description: $("activity-description").value.trim(), imageUrl: uploaded.secure_url, storagePath: uploaded.public_id, createdAt: serverTimestamp() });
-            $("activity-form").reset(); message("Foto berhasil diunggah.");
-        } catch (error) { message(`Gagal mengunggah foto: ${error.message}`, true); }
+            if (editId) {
+                const { getDoc } = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js");
+                const snapshot = await getDoc(doc(db, "deadlines", editId)); const data = snapshot.data();
+                $("deadline-id").value = editId; $("course").value = data.course; $("label").value = data.label || ""; $("date").value = data.date; $("time").value = data.time; $("deadline-submit").textContent = "Simpan perubahan"; $("deadline-cancel").hidden = false;
+            }
+            if (deleteId && confirm("Hapus deadline ini?")) await deleteDoc(doc(db, "deadlines", deleteId));
+        } catch (error) { message(`Gagal mengelola deadline: ${error.message}`, true); }
+    });
+
+    $("activity-form").addEventListener("submit", async (event) => {
+        event.preventDefault();
+        try {
+            const file = $("activity-file").files[0];
+            const uploaded = await uploadImage(file);
+            await addDoc(collection(db, "activities"), {
+                title: $("activity-title").value.trim(),
+                description: $("activity-description").value.trim(),
+                imageUrl: uploaded.imageUrl, storagePath: uploaded.publicId, createdAt: serverTimestamp()
+            });
+            $("activity-form").reset(); message("Foto aktivitas berhasil diunggah.");
+        } catch (error) { message(`Gagal mengunggah foto aktivitas: ${error.message}`, true); }
     });
     $("activity-items").addEventListener("click", async (event) => {
-        const id = event.target.dataset.activityDelete; if (!id || !confirm("Hapus foto ini?")) return;
-        try { await deleteDoc(doc(db, "activities", id)); message("Foto dihapus dari website utama."); } catch (error) { message(`Gagal menghapus foto: ${error.message}`, true); }
+        const id = event.target.dataset.activityDelete; if (!id || !confirm("Hapus foto ini dari website?")) return;
+        try { await deleteDoc(doc(db, "activities", id)); message("Foto dihapus dari galeri website."); } catch (error) { message(`Gagal menghapus foto: ${error.message}`, true); }
+    });
+
+    $("team-form").addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const id = $("team-id").value;
+        try {
+            const previous = id ? teamDataById.get(id) : null;
+            const file = $("team-file").files[0];
+            const uploaded = file ? await uploadImage(file) : null;
+            const data = {
+                name: $("team-name").value.trim(),
+                role: $("team-role").value.trim(),
+                description: $("team-description").value.trim(),
+                buttonText: $("team-button").value.trim(),
+                order: Number($("team-order").value),
+                featured: $("team-featured").checked,
+                imageUrl: uploaded?.imageUrl || previous?.imageUrl || "",
+                imagePublicId: uploaded?.publicId || previous?.imagePublicId || "",
+                updatedAt: serverTimestamp()
+            };
+            if (id) await updateDoc(doc(db, "team", id), data);
+            else await addDoc(collection(db, "team"), { ...data, createdAt: serverTimestamp() });
+            resetTeam(); message("Profil struktur kelas berhasil disimpan.");
+        } catch (error) { message(`Gagal menyimpan profil: ${error.message}`, true); }
+    });
+    $("team-cancel").addEventListener("click", resetTeam);
+    $("team-items").addEventListener("click", async (event) => {
+        const editId = event.target.dataset.teamEdit; const deleteId = event.target.dataset.teamDelete;
+        if (editId) {
+            const data = teamDataById.get(editId);
+            if (!data) return;
+            $("team-id").value = editId; $("team-name").value = data.name || ""; $("team-role").value = data.role || "";
+            $("team-description").value = data.description || ""; $("team-button").value = data.buttonText || "";
+            $("team-order").value = Number(data.order) || 1; $("team-featured").checked = Boolean(data.featured);
+            $("team-submit").textContent = "Simpan perubahan"; $("team-cancel").hidden = false;
+        }
+        if (deleteId && confirm("Hapus profil struktur kelas ini?")) {
+            try { await deleteDoc(doc(db, "team", deleteId)); message("Profil struktur kelas berhasil dihapus."); }
+            catch (error) { message(`Gagal menghapus profil: ${error.message}`, true); }
+        }
+    });
+
+    $("aspiration-items").addEventListener("click", async (event) => {
+        const id = event.target.dataset.aspirationDelete; if (!id || !confirm("Hapus aspirasi ini?")) return;
+        try { await deleteDoc(doc(db, "aspirations", id)); message("Aspirasi berhasil dihapus."); }
+        catch (error) { message(`Gagal menghapus aspirasi: ${error.message}`, true); }
     });
 }

@@ -6,7 +6,7 @@ const form = document.querySelector("#login-form");
 const notice = form.querySelector(".auth-notice");
 const submitButton = form.querySelector('[type="submit"]');
 const params = new URLSearchParams(window.location.search);
-const redirectToAdmin = params.get("redirect") === "admin";
+const redirectToAdmin = params.get("redirect") !== "home";
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
