@@ -69,6 +69,13 @@ function deadlineInputDate(value) {
 
 function renderDeadlines(snapshot) {
     $("deadline-count").textContent = `${snapshot.size} item`;
+    const syncStatus = $("deadline-sync-status");
+    if (syncStatus) {
+        syncStatus.className = "sync-status";
+        syncStatus.textContent = snapshot.size
+            ? `Terhubung ke ${firebaseConfig.projectId}: ${snapshot.size} dokumen deadline.`
+            : `Terhubung ke ${firebaseConfig.projectId}, tetapi collection deadlines kosong.`;
+    }
     const container = $("deadline-items"); container.innerHTML = "";
     if (!snapshot.size) return empty(container, "Belum ada data deadline.");
     const entries = snapshot.docs.slice().sort((left, right) => {
@@ -196,7 +203,14 @@ if (!configured) {
             message(`Gagal menyiapkan data struktur kelas: ${error.message}`, true);
         }
         activeSubscriptions = [
-            onSnapshot(collection(db, "deadlines"), renderDeadlines, (error) => message(`Gagal membaca deadline (${error.code || "error"}). Periksa Firestore Rules.`, true)),
+            onSnapshot(collection(db, "deadlines"), renderDeadlines, (error) => {
+                const syncStatus = $("deadline-sync-status");
+                if (syncStatus) {
+                    syncStatus.className = "sync-status error";
+                    syncStatus.textContent = `Gagal membaca deadlines dari ${firebaseConfig.projectId}: ${error.code || error.message}. Periksa Firestore Rules.`;
+                }
+                message(`Gagal membaca deadline (${error.code || "error"}). Periksa Firestore Rules.`, true);
+            }),
             onSnapshot(query(collection(db, "activities"), orderBy("createdAt", "desc")), renderActivities, () => message("Gagal membaca galeri. Periksa Firestore Rules.", true)),
             onSnapshot(query(collection(db, "team"), orderBy("order", "asc")), renderTeam, () => message("Gagal membaca struktur kelas. Periksa Firestore Rules.", true)),
             onSnapshot(query(collection(db, "aspirations"), orderBy("createdAt", "desc")), renderAspirations, () => message("Gagal membaca aspirasi. Periksa Firestore Rules.", true))

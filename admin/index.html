@@ -31,6 +31,7 @@
                         <label>Jam<input id="time" type="time" required></label>
                         <div class="form-actions"><button id="deadline-submit">Tambah deadline</button><button type="button" class="secondary" id="deadline-cancel" hidden>Batal</button></div>
                     </form>
+                    <p class="sync-status" id="deadline-sync-status" role="status" aria-live="polite">Menunggu data dari Firestore…</p>
                     <div id="deadline-items" class="item-list"></div>
                 </section>
                 <section class="card">
