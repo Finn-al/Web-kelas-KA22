@@ -197,11 +197,6 @@ if (!configured) {
 
         message(`Terhubung sebagai ${user.email}`);
         renderTeam({ docs: [] });
-        try {
-            await initializeTeamDefaults();
-        } catch (error) {
-            message(`Gagal menyiapkan data struktur kelas: ${error.message}`, true);
-        }
         activeSubscriptions = [
             onSnapshot(collection(db, "deadlines"), renderDeadlines, (error) => {
                 const syncStatus = $("deadline-sync-status");
@@ -215,6 +210,9 @@ if (!configured) {
             onSnapshot(query(collection(db, "team"), orderBy("order", "asc")), renderTeam, () => message("Gagal membaca struktur kelas. Periksa Firestore Rules.", true)),
             onSnapshot(query(collection(db, "aspirations"), orderBy("createdAt", "desc")), renderAspirations, () => message("Gagal membaca aspirasi. Periksa Firestore Rules.", true))
         ];
+        initializeTeamDefaults().catch((error) => {
+            message(`Gagal menyiapkan data struktur kelas: ${error.message}`, true);
+        });
     });
 
     $("logout").addEventListener("click", () => signOut(auth));
