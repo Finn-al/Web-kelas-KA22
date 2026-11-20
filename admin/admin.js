@@ -198,15 +198,28 @@ if (!configured) {
     });
     $("deadline-cancel").addEventListener("click", resetDeadline);
     $("deadline-items").addEventListener("click", async (event) => {
-        const editId = event.target.dataset.edit; const deleteId = event.target.dataset.delete;
+        const button = event.target.closest("button");
+        if (!button) return;
+        const editId = button.dataset.edit;
+        const deleteId = button.dataset.delete;
         try {
             if (editId) {
                 const { getDoc } = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js");
                 const snapshot = await getDoc(doc(db, "deadlines", editId)); const data = snapshot.data();
                 $("deadline-id").value = editId; $("course").value = data.course; $("label").value = data.label || ""; $("date").value = data.date; $("time").value = data.time; $("deadline-submit").textContent = "Simpan perubahan"; $("deadline-cancel").hidden = false;
             }
-            if (deleteId && confirm("Hapus deadline ini?")) await deleteDoc(doc(db, "deadlines", deleteId));
-        } catch (error) { message(`Gagal mengelola deadline: ${error.message}`, true); }
+            if (deleteId && confirm("Hapus deadline ini?")) {
+                button.disabled = true;
+                await deleteDoc(doc(db, "deadlines", deleteId));
+                message("Deadline berhasil dihapus.");
+            }
+        } catch (error) {
+            if (deleteId) button.disabled = false;
+            const reason = error.code === "permission-denied"
+                ? "Firestore menolak penghapusan. Pastikan Rules deadlines mengizinkan write untuk pengguna login."
+                : error.message;
+            message(`Gagal mengelola deadline (${error.code || "error"}): ${reason}`, true);
+        }
     });
 
     $("activity-form").addEventListener("submit", async (event) => {
