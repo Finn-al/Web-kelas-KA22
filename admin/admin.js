@@ -54,14 +54,31 @@ function formatCreatedAt(timestamp) {
     if (!timestamp || typeof timestamp.toDate !== "function") return "Waktu tidak tersedia";
     return new Intl.DateTimeFormat("id-ID", { dateStyle: "medium", timeStyle: "short" }).format(timestamp.toDate());
 }
+function getDeadlineFields(data) {
+    return {
+        course: data.course || data.subject || data.mataKuliah || data.title || data.name || "",
+        label: data.label || data.type || "",
+        date: data.date || data.tanggal || "",
+        time: data.time || data.jam || ""
+    };
+}
+function deadlineInputDate(value) {
+    if (value && typeof value.toDate === "function") return value.toDate().toISOString().slice(0, 10);
+    return String(value || "").slice(0, 10);
+}
 
 function renderDeadlines(snapshot) {
     $("deadline-count").textContent = `${snapshot.size} item`;
     const container = $("deadline-items"); container.innerHTML = "";
     if (!snapshot.size) return empty(container, "Belum ada data deadline.");
-    snapshot.forEach((entry) => {
-        const data = entry.data();
-        container.insertAdjacentHTML("beforeend", `<article class="item"><div><strong>${escapeHtml(data.course)}${data.label ? ` · ${escapeHtml(data.label)}` : ""}</strong><small>${escapeHtml(data.date)} · ${escapeHtml(data.time)}</small></div><div class="item-actions"><button data-edit="${escapeHtml(entry.id)}" class="secondary">Edit</button><button data-delete="${escapeHtml(entry.id)}" class="danger">Hapus</button></div></article>`);
+    const entries = snapshot.docs.slice().sort((left, right) => {
+        const a = getDeadlineFields(left.data());
+        const b = getDeadlineFields(right.data());
+        return `${a.date} ${a.time}`.localeCompare(`${b.date} ${b.time}`);
+    });
+    entries.forEach((entry) => {
+        const data = getDeadlineFields(entry.data());
+        container.insertAdjacentHTML("beforeend", `<article class="item"><div><strong>${escapeHtml(data.course || "Deadline tanpa nama")}${data.label ? ` · ${escapeHtml(data.label)}` : ""}</strong><small>${escapeHtml(data.date || "Tanggal belum diisi")} · ${escapeHtml(data.time || "Jam belum diisi")}</small></div><div class="item-actions"><button data-edit="${escapeHtml(entry.id)}" class="secondary">Edit</button><button data-delete="${escapeHtml(entry.id)}" class="danger">Hapus</button></div></article>`);
     });
 }
 
@@ -179,7 +196,7 @@ if (!configured) {
             message(`Gagal menyiapkan data struktur kelas: ${error.message}`, true);
         }
         activeSubscriptions = [
-            onSnapshot(query(collection(db, "deadlines"), orderBy("date", "asc")), renderDeadlines, () => message("Gagal membaca deadline. Periksa Firestore Rules.", true)),
+            onSnapshot(collection(db, "deadlines"), renderDeadlines, (error) => message(`Gagal membaca deadline (${error.code || "error"}). Periksa Firestore Rules.`, true)),
             onSnapshot(query(collection(db, "activities"), orderBy("createdAt", "desc")), renderActivities, () => message("Gagal membaca galeri. Periksa Firestore Rules.", true)),
             onSnapshot(query(collection(db, "team"), orderBy("order", "asc")), renderTeam, () => message("Gagal membaca struktur kelas. Periksa Firestore Rules.", true)),
             onSnapshot(query(collection(db, "aspirations"), orderBy("createdAt", "desc")), renderAspirations, () => message("Gagal membaca aspirasi. Periksa Firestore Rules.", true))
@@ -205,8 +222,8 @@ if (!configured) {
         try {
             if (editId) {
                 const { getDoc } = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js");
-                const snapshot = await getDoc(doc(db, "deadlines", editId)); const data = snapshot.data();
-                $("deadline-id").value = editId; $("course").value = data.course; $("label").value = data.label || ""; $("date").value = data.date; $("time").value = data.time; $("deadline-submit").textContent = "Simpan perubahan"; $("deadline-cancel").hidden = false;
+                const snapshot = await getDoc(doc(db, "deadlines", editId)); const data = getDeadlineFields(snapshot.data() || {});
+                $("deadline-id").value = editId; $("course").value = data.course; $("label").value = data.label; $("date").value = deadlineInputDate(data.date); $("time").value = data.time; $("deadline-submit").textContent = "Simpan perubahan"; $("deadline-cancel").hidden = false;
             }
             if (deleteId && confirm("Hapus deadline ini?")) {
                 button.disabled = true;
